@@ -22,7 +22,21 @@ db.connect((err) => {
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
-app.get("/employees", (req, res) => {
+// Middleware для перевірки ролі користувача
+function checkRole(role) {
+  return (req, res, next) => {
+    // Приклад: отримуємо роль з запиту (може бути через токен або інший метод аутентифікації)
+    const userRole = req.headers["role"];
+
+    if (userRole !== role) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+    next();
+  };
+}
+
+// Employees endpoints
+app.get("/employees", checkRole("HR Manager"), (req, res) => {
   let sql = "SELECT * FROM Employees";
   db.query(sql, (err, results) => {
     if (err) {
@@ -34,7 +48,7 @@ app.get("/employees", (req, res) => {
   });
 });
 
-app.get("/employees/:id", (req, res) => {
+app.get("/employees/:id", checkRole("HR Manager"), (req, res) => {
   let sql = "SELECT * FROM Employees WHERE ID = ?";
   db.query(sql, [req.params.id], (err, results) => {
     if (err) {
@@ -46,7 +60,7 @@ app.get("/employees/:id", (req, res) => {
   });
 });
 
-app.post("/employees", (req, res) => {
+app.post("/employees", checkRole("HR Manager"), (req, res) => {
   const newEmployee = req.body;
   const sql =
     "INSERT INTO Employees (FullName, Subdivision, Position, Status, PeoplePartner, OutOfOfficeBalance, Photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -70,7 +84,7 @@ app.post("/employees", (req, res) => {
   });
 });
 
-app.put("/employees/:id", (req, res) => {
+app.put("/employees/:id", checkRole("HR Manager"), (req, res) => {
   const updatedEmployee = req.body;
   const sql =
     "UPDATE Employees SET FullName = ?, Subdivision = ?, Position = ?, Status = ?, PeoplePartner = ?, OutOfOfficeBalance = ?, Photo = ? WHERE ID = ?";
@@ -95,7 +109,7 @@ app.put("/employees/:id", (req, res) => {
   });
 });
 
-app.delete("/employees/:id", (req, res) => {
+app.delete("/employees/:id", checkRole("HR Manager"), (req, res) => {
   const sql = "DELETE FROM Employees WHERE ID = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) {
@@ -107,7 +121,8 @@ app.delete("/employees/:id", (req, res) => {
   });
 });
 
-app.get("/projects", (req, res) => {
+// Projects endpoints
+app.get("/projects", checkRole("Project Manager"), (req, res) => {
   let sql = "SELECT * FROM Projects";
   db.query(sql, (err, results) => {
     if (err) {
@@ -119,7 +134,7 @@ app.get("/projects", (req, res) => {
   });
 });
 
-app.get("/projects/:id", (req, res) => {
+app.get("/projects/:id", checkRole("Project Manager"), (req, res) => {
   let sql = "SELECT * FROM Projects WHERE ID = ?";
   db.query(sql, [req.params.id], (err, results) => {
     if (err) {
@@ -131,7 +146,7 @@ app.get("/projects/:id", (req, res) => {
   });
 });
 
-app.post("/projects", (req, res) => {
+app.post("/projects", checkRole("Project Manager"), (req, res) => {
   const newProject = req.body;
   const sql =
     "INSERT INTO Projects (ProjectType, StartDate, EndDate, ProjectManager, Comment, Status) VALUES (?, ?, ?, ?, ?, ?)";
@@ -154,7 +169,7 @@ app.post("/projects", (req, res) => {
   });
 });
 
-app.put("/projects/:id", (req, res) => {
+app.put("/projects/:id", checkRole("Project Manager"), (req, res) => {
   const updatedProject = req.body;
   const sql =
     "UPDATE Projects SET ProjectType = ?, StartDate = ?, EndDate = ?, ProjectManager = ?, Comment = ?, Status = ? WHERE ID = ?";
@@ -178,7 +193,7 @@ app.put("/projects/:id", (req, res) => {
   });
 });
 
-app.delete("/projects/:id", (req, res) => {
+app.delete("/projects/:id", checkRole("Project Manager"), (req, res) => {
   const sql = "DELETE FROM Projects WHERE ID = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) {
@@ -190,7 +205,8 @@ app.delete("/projects/:id", (req, res) => {
   });
 });
 
-app.get("/leave-requests", (req, res) => {
+// LeaveRequests endpoints
+app.get("/leave-requests", checkRole("Employee"), (req, res) => {
   let sql = "SELECT * FROM LeaveRequests";
   db.query(sql, (err, results) => {
     if (err) {
@@ -202,7 +218,7 @@ app.get("/leave-requests", (req, res) => {
   });
 });
 
-app.get("/leave-requests/:id", (req, res) => {
+app.get("/leave-requests/:id", checkRole("Employee"), (req, res) => {
   let sql = "SELECT * FROM LeaveRequests WHERE ID = ?";
   db.query(sql, [req.params.id], (err, results) => {
     if (err) {
@@ -214,7 +230,7 @@ app.get("/leave-requests/:id", (req, res) => {
   });
 });
 
-app.post("/leave-requests", (req, res) => {
+app.post("/leave-requests", checkRole("Employee"), (req, res) => {
   const newLeaveRequest = req.body;
   const sql =
     "INSERT INTO LeaveRequests (Employee, AbsenceReason, StartDate, EndDate, Comment, Status) VALUES (?, ?, ?, ?, ?, ?)";
@@ -237,7 +253,7 @@ app.post("/leave-requests", (req, res) => {
   });
 });
 
-app.put("/leave-requests/:id", (req, res) => {
+app.put("/leave-requests/:id", checkRole("Employee"), (req, res) => {
   const updatedLeaveRequest = req.body;
   const sql =
     "UPDATE LeaveRequests SET Employee = ?, AbsenceReason = ?, StartDate = ?, EndDate = ?, Comment = ?, Status = ? WHERE ID = ?";
@@ -261,7 +277,7 @@ app.put("/leave-requests/:id", (req, res) => {
   });
 });
 
-app.delete("/leave-requests/:id", (req, res) => {
+app.delete("/leave-requests/:id", checkRole("Employee"), (req, res) => {
   const sql = "DELETE FROM LeaveRequests WHERE ID = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) {
@@ -273,7 +289,8 @@ app.delete("/leave-requests/:id", (req, res) => {
   });
 });
 
-app.get("/approval-requests", (req, res) => {
+// ApprovalRequests endpoints
+app.get("/approval-requests", checkRole("HR Manager"), (req, res) => {
   let sql = "SELECT * FROM ApprovalRequests";
   db.query(sql, (err, results) => {
     if (err) {
@@ -285,7 +302,7 @@ app.get("/approval-requests", (req, res) => {
   });
 });
 
-app.get("/approval-requests/:id", (req, res) => {
+app.get("/approval-requests/:id", checkRole("HR Manager"), (req, res) => {
   let sql = "SELECT * FROM ApprovalRequests WHERE ID = ?";
   db.query(sql, [req.params.id], (err, results) => {
     if (err) {
@@ -297,7 +314,7 @@ app.get("/approval-requests/:id", (req, res) => {
   });
 });
 
-app.post("/approval-requests", (req, res) => {
+app.post("/approval-requests", checkRole("HR Manager"), (req, res) => {
   const newApprovalRequest = req.body;
   const sql =
     "INSERT INTO ApprovalRequests (Approver, LeaveRequest, Comment, Status) VALUES (?, ?, ?, ?)";
@@ -318,7 +335,7 @@ app.post("/approval-requests", (req, res) => {
   });
 });
 
-app.put("/approval-requests/:id", (req, res) => {
+app.put("/approval-requests/:id", checkRole("HR Manager"), (req, res) => {
   const updatedApprovalRequest = req.body;
   const sql =
     "UPDATE ApprovalRequests SET Approver = ?, LeaveRequest = ?, Comment = ?, Status = ? WHERE ID = ?";
@@ -340,7 +357,7 @@ app.put("/approval-requests/:id", (req, res) => {
   });
 });
 
-app.delete("/approval-requests/:id", (req, res) => {
+app.delete("/approval-requests/:id", checkRole("HR Manager"), (req, res) => {
   const sql = "DELETE FROM ApprovalRequests WHERE ID = ?";
   db.query(sql, [req.params.id], (err, result) => {
     if (err) {
