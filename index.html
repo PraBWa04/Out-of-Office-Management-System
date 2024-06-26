@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Out of Office Management</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Out of Office Management</h1>
+      <nav>
+        <ul>
+          <li><a href="#employees">Employees</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#leave-requests">Leave Requests</a></li>
+          <li><a href="#approval-requests">Approval Requests</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section id="employees">
+        <h2>Employees</h2>
+        <table id="employees-table">
+          <!-- Employee table will be here -->
+        </table>
+        <h3>Add New Employee</h3>
+        <form id="add-employee-form">
+          <label for="full-name">Full Name:</label>
+          <input type="text" id="full-name" name="full-name" required />
+          <br />
+          <label for="subdivision">Subdivision:</label>
+          <input type="text" id="subdivision" name="subdivision" required />
+          <br />
+          <label for="position">Position:</label>
+          <input type="text" id="position" name="position" required />
+          <br />
+          <label for="status">Status:</label>
+          <select id="status" name="status" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+          <br />
+          <label for="people-partner">People Partner:</label>
+          <input type="number" id="people-partner" name="people-partner" />
+          <br />
+          <label for="out-of-office-balance">Out of Office Balance:</label>
+          <input
+            type="number"
+            id="out-of-office-balance"
+            name="out-of-office-balance"
+            required
+          />
+          <br />
+          <label for="photo">Photo:</label>
+          <input type="text" id="photo" name="photo" />
+          <br />
+          <button type="submit">Add Employee</button>
+        </form>
+      </section>
+
+      <section id="edit-employee" style="display: none">
+        <h3>Edit Employee</h3>
+        <form id="edit-employee-form">
+          <input type="hidden" id="edit-employee-id" name="edit-employee-id" />
+          <label for="edit-full-name">Full Name:</label>
+          <input
+            type="text"
+            id="edit-full-name"
+            name="edit-full-name"
+            required
+          />
+          <br />
+          <label for="edit-subdivision">Subdivision:</label>
+          <input
+            type="text"
+            id="edit-subdivision"
+            name="edit-subdivision"
+            required
+          />
+          <br />
+          <label for="edit-position">Position:</label>
+          <input type="text" id="edit-position" name="edit-position" required />
+          <br />
+          <label for="edit-status">Status:</label>
+          <select id="edit-status" name="edit-status" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+          <br />
+          <label for="edit-people-partner">People Partner:</label>
+          <input
+            type="number"
+            id="edit-people-partner"
+            name="edit-people-partner"
+          />
+          <br />
+          <label for="edit-out-of-office-balance">Out of Office Balance:</label>
+          <input
+            type="number"
+            id="edit-out-of-office-balance"
+            name="edit-out-of-office-balance"
+            required
+          />
+          <br />
+          <label for="edit-photo">Photo:</label>
+          <input type="text" id="edit-photo" name="edit-photo" />
+          <br />
+          <button type="submit">Save Changes</button>
+        </form>
+      </section>
+
+      <section id="projects">
+        <h2>Projects</h2>
+        <table id="projects-table">
+          <!-- Project table will be here -->
+        </table>
+        <h3>Add New Project</h3>
+        <form id="add-project-form">
+          <label for="project-type">Project Type:</label>
+          <input type="text" id="project-type" name="project-type" required />
+          <br />
+          <label for="start-date">Start Date:</label>
+          <input type="date" id="start-date" name="start-date" required />
+          <br />
+          <label for="end-date">End Date:</label>
+          <input type="date" id="end-date" name="end-date" />
+          <br />
+          <label for="project-manager">Project Manager:</label>
+          <input
+            type="number"
+            id="project-manager"
+            name="project-manager"
+            required
+          />
+          <br />
+          <label for="comment">Comment:</label>
+          <input type="text" id="comment" name="comment" />
+          <br />
+          <label for="project-status">Status:</label>
+          <select id="project-status" name="project-status" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+          <br />
+          <button type="submit">Add Project</button>
+        </form>
+      </section>
+
+      <section id="edit-project" style="display: none">
+        <h3>Edit Project</h3>
+        <form id="edit-project-form">
+          <input type="hidden" id="edit-project-id" name="edit-project-id" />
+          <label for="edit-project-type">Project Type:</label>
+          <input
+            type="text"
+            id="edit-project-type"
+            name="edit-project-type"
+            required
+          />
+          <br />
+          <label for="edit-start-date">Start Date:</label>
+          <input
+            type="date"
+            id="edit-start-date"
+            name="edit-start-date"
+            required
+          />
+          <br />
+          <label for="edit-end-date">End Date:</label>
+          <input type="date" id="edit-end-date" name="edit-end-date" />
+          <br />
+          <label for="edit-project-manager">Project Manager:</label>
+          <input
+            type="number"
+            id="edit-project-manager"
+            name="edit-project-manager"
+            required
+          />
+          <br />
+          <label for="edit-comment">Comment:</label>
+          <input type="text" id="edit-comment" name="edit-comment" />
+          <br />
+          <label for="edit-project-status">Status:</label>
+          <select id="edit-project-status" name="edit-project-status" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+          <br />
+          <button type="submit">Save Changes</button>
+        </form>
+      </section>
+
+      <section id="leave-requests">
+        <h2>Leave Requests</h2>
+        <table id="leave-requests-table">
+          <!-- Leave Requests table will be here -->
+        </table>
+        <h3>Add New Leave Request</h3>
+        <form id="add-leave-request-form">
+          <label for="leave-employee">Employee:</label>
+          <input
+            type="number"
+            id="leave-employee"
+            name="leave-employee"
+            required
+          />
+          <br />
+          <label for="absence-reason">Absence Reason:</label>
+          <input
+            type="text"
+            id="absence-reason"
+            name="absence-reason"
+            required
+          />
+          <br />
+          <label for="leave-start-date">Start Date:</label>
+          <input
+            type="date"
+            id="leave-start-date"
+            name="leave-start-date"
+            required
+          />
+          <br />
+          <label for="leave-end-date">End Date:</label>
+          <input
+            type="date"
+            id="leave-end-date"
+            name="leave-end-date"
+            required
+          />
+          <br />
+          <label for="leave-comment">Comment:</label>
+          <textarea id="leave-comment" name="leave-comment"></textarea>
+          <br />
+          <button type="submit">Add Leave Request</button>
+        </form>
+      </section>
+
+      <section id="edit-leave-request" style="display: none">
+        <h3>Edit Leave Request</h3>
+        <form id="edit-leave-request-form">
+          <input
+            type="hidden"
+            id="edit-leave-request-id"
+            name="edit-leave-request-id"
+          />
+          <label for="edit-leave-employee">Employee:</label>
+          <input
+            type="number"
+            id="edit-leave-employee"
+            name="edit-leave-employee"
+            required
+          />
+          <br />
+          <label for="edit-absence-reason">Absence Reason:</label>
+          <input
+            type="text"
+            id="edit-absence-reason"
+            name="edit-absence-reason"
+            required
+          />
+          <br />
+          <label for="edit-leave-start-date">Start Date:</label>
+          <input
+            type="date"
+            id="edit-leave-start-date"
+            name="edit-leave-start-date"
+            required
+          />
+          <br />
+          <label for="edit-leave-end-date">End Date:</label>
+          <input
+            type="date"
+            id="edit-leave-end-date"
+            name="edit-leave-end-date"
+            required
+          />
+          <br />
+          <label for="edit-leave-comment">Comment:</label>
+          <textarea
+            id="edit-leave-comment"
+            name="edit-leave-comment"
+          ></textarea>
+          <br />
+          <button type="submit">Save Changes</button>
+        </form>
+      </section>
+
+      <section id="approval-requests">
+        <h2>Approval Requests</h2>
+        <table id="approval-requests-table">
+          <!-- Approval Requests table will be here -->
+        </table>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
