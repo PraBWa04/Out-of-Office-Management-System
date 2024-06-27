@@ -14,7 +14,7 @@ This project is a leave management system for company employees. It allows HR ma
 - Node.js
 - Express.js
 - MySQL
-- Postman для тестування API
+- Postman for testing API
 
 # SQL Queries to Create Database
 
