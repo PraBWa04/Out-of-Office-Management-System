@@ -44,8 +44,15 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadEmployees() {
-  fetch("/employees")
-    .then((response) => response.json())
+  fetch("http://localhost:3001/employees", {
+    headers: {
+      role: "HR Manager",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       const employeesTable = document.getElementById("employees-table");
       let table = `
@@ -88,11 +95,17 @@ function loadEmployees() {
 function addEmployee() {
   const formData = new FormData(document.getElementById("add-employee-form"));
 
-  fetch("/employees", {
+  fetch("http://localhost:3001/employees", {
     method: "POST",
+    headers: {
+      role: "HR Manager",
+    },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       console.log("Success:", data);
       loadEmployees(); // Refresh the employees table
@@ -101,8 +114,15 @@ function addEmployee() {
 }
 
 function editEmployee(id) {
-  fetch(`/employees/${id}`)
-    .then((response) => response.json())
+  fetch(`http://localhost:3001/employees/${id}`, {
+    headers: {
+      role: "HR Manager",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((employee) => {
       document.getElementById("edit-employee-id").value = employee.ID;
       document.getElementById("edit-full-name").value = employee.FullName;
@@ -119,14 +139,20 @@ function editEmployee(id) {
 }
 
 function updateEmployee() {
-  const formData = new FormData(document.getElementById("edit-employee-form"));
   const id = document.getElementById("edit-employee-id").value;
+  const formData = new FormData(document.getElementById("edit-employee-form"));
 
-  fetch(`/employees/${id}`, {
+  fetch(`http://localhost:3001/employees/${id}`, {
     method: "PUT",
+    headers: {
+      role: "HR Manager",
+    },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       console.log("Success:", data);
       loadEmployees(); // Refresh the employees table
@@ -136,20 +162,29 @@ function updateEmployee() {
 }
 
 function deleteEmployee(id) {
-  fetch(`/employees/${id}`, {
+  fetch(`http://localhost:3001/employees/${id}`, {
     method: "DELETE",
+    headers: {
+      role: "HR Manager",
+    },
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
       loadEmployees(); // Refresh the employees table
     })
     .catch((error) => console.error("Error:", error));
 }
 
 function loadProjects() {
-  fetch("/projects")
-    .then((response) => response.json())
+  fetch("http://localhost:3001/projects", {
+    headers: {
+      role: "Project Manager",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       const projectsTable = document.getElementById("projects-table");
       let table = `
@@ -190,11 +225,17 @@ function loadProjects() {
 function addProject() {
   const formData = new FormData(document.getElementById("add-project-form"));
 
-  fetch("/projects", {
+  fetch("http://localhost:3001/projects", {
     method: "POST",
+    headers: {
+      role: "Project Manager",
+    },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       console.log("Success:", data);
       loadProjects(); // Refresh the projects table
@@ -203,8 +244,15 @@ function addProject() {
 }
 
 function editProject(id) {
-  fetch(`/projects/${id}`)
-    .then((response) => response.json())
+  fetch(`http://localhost:3001/projects/${id}`, {
+    headers: {
+      role: "Project Manager",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((project) => {
       document.getElementById("edit-project-id").value = project.ID;
       document.getElementById("edit-project-type").value = project.ProjectType;
@@ -213,21 +261,27 @@ function editProject(id) {
       document.getElementById("edit-project-manager").value =
         project.ProjectManager;
       document.getElementById("edit-comment").value = project.Comment;
-      document.getElementById("edit-project-status").value = project.Status;
+      document.getElementById("edit-status").value = project.Status;
       document.getElementById("edit-project").style.display = "block";
     })
     .catch((error) => console.error("Error:", error));
 }
 
 function updateProject() {
-  const formData = new FormData(document.getElementById("edit-project-form"));
   const id = document.getElementById("edit-project-id").value;
+  const formData = new FormData(document.getElementById("edit-project-form"));
 
-  fetch(`/projects/${id}`, {
+  fetch(`http://localhost:3001/projects/${id}`, {
     method: "PUT",
+    headers: {
+      role: "Project Manager",
+    },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       console.log("Success:", data);
       loadProjects(); // Refresh the projects table
@@ -237,20 +291,29 @@ function updateProject() {
 }
 
 function deleteProject(id) {
-  fetch(`/projects/${id}`, {
+  fetch(`http://localhost:3001/projects/${id}`, {
     method: "DELETE",
+    headers: {
+      role: "Project Manager",
+    },
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
       loadProjects(); // Refresh the projects table
     })
     .catch((error) => console.error("Error:", error));
 }
 
 function loadLeaveRequests() {
-  fetch("/leave-requests")
-    .then((response) => response.json())
+  fetch("http://localhost:3001/leave-requests", {
+    headers: {
+      role: "Employee",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       const leaveRequestsTable = document.getElementById(
         "leave-requests-table"
@@ -269,18 +332,18 @@ function loadLeaveRequests() {
               </tr>
           </thead>
           <tbody>`;
-      data.forEach((request) => {
+      data.forEach((leaveRequest) => {
         table += `<tr>
-                        <td>${request.ID}</td>
-                        <td>${request.Employee}</td>
-                        <td>${request.AbsenceReason}</td>
-                        <td>${request.StartDate}</td>
-                        <td>${request.EndDate}</td>
-                        <td>${request.Comment}</td>
-                        <td>${request.Status}</td>
+                        <td>${leaveRequest.ID}</td>
+                        <td>${leaveRequest.EmployeeID}</td>
+                        <td>${leaveRequest.AbsenceReason}</td>
+                        <td>${leaveRequest.StartDate}</td>
+                        <td>${leaveRequest.EndDate}</td>
+                        <td>${leaveRequest.Comment}</td>
+                        <td>${leaveRequest.Status}</td>
                         <td>
-                          <button class="btn btn-sm btn-warning" onclick="editLeaveRequest(${request.ID})">Edit</button>
-                          <button class="btn btn-sm btn-danger" onclick="deleteLeaveRequest(${request.ID})">Delete</button>
+                          <button class="btn btn-sm btn-warning" onclick="editLeaveRequest(${leaveRequest.ID})">Edit</button>
+                          <button class="btn btn-sm btn-danger" onclick="deleteLeaveRequest(${leaveRequest.ID})">Delete</button>
                         </td>
                       </tr>`;
       });
@@ -295,11 +358,17 @@ function addLeaveRequest() {
     document.getElementById("add-leave-request-form")
   );
 
-  fetch("/leave-requests", {
+  fetch("http://localhost:3001/leave-requests", {
     method: "POST",
+    headers: {
+      role: "Employee",
+    },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       console.log("Success:", data);
       loadLeaveRequests(); // Refresh the leave requests table
@@ -308,33 +377,46 @@ function addLeaveRequest() {
 }
 
 function editLeaveRequest(id) {
-  fetch(`/leave-requests/${id}`)
-    .then((response) => response.json())
-    .then((request) => {
-      document.getElementById("edit-leave-request-id").value = request.ID;
-      document.getElementById("edit-leave-employee").value = request.Employee;
+  fetch(`http://localhost:3001/leave-requests/${id}`, {
+    headers: {
+      role: "Employee",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
+    .then((leaveRequest) => {
+      document.getElementById("edit-leave-request-id").value = leaveRequest.ID;
+      document.getElementById("edit-employee").value = leaveRequest.EmployeeID;
       document.getElementById("edit-absence-reason").value =
-        request.AbsenceReason;
-      document.getElementById("edit-leave-start-date").value =
-        request.StartDate;
-      document.getElementById("edit-leave-end-date").value = request.EndDate;
-      document.getElementById("edit-leave-comment").value = request.Comment;
+        leaveRequest.AbsenceReason;
+      document.getElementById("edit-start-date").value = leaveRequest.StartDate;
+      document.getElementById("edit-end-date").value = leaveRequest.EndDate;
+      document.getElementById("edit-comment").value = leaveRequest.Comment;
+      document.getElementById("edit-status").value = leaveRequest.Status;
       document.getElementById("edit-leave-request").style.display = "block";
     })
     .catch((error) => console.error("Error:", error));
 }
 
 function updateLeaveRequest() {
+  const id = document.getElementById("edit-leave-request-id").value;
   const formData = new FormData(
     document.getElementById("edit-leave-request-form")
   );
-  const id = document.getElementById("edit-leave-request-id").value;
 
-  fetch(`/leave-requests/${id}`, {
+  fetch(`http://localhost:3001/leave-requests/${id}`, {
     method: "PUT",
+    headers: {
+      role: "Employee",
+    },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       console.log("Success:", data);
       loadLeaveRequests(); // Refresh the leave requests table
@@ -344,20 +426,29 @@ function updateLeaveRequest() {
 }
 
 function deleteLeaveRequest(id) {
-  fetch(`/leave-requests/${id}`, {
+  fetch(`http://localhost:3001/leave-requests/${id}`, {
     method: "DELETE",
+    headers: {
+      role: "Employee",
+    },
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
       loadLeaveRequests(); // Refresh the leave requests table
     })
     .catch((error) => console.error("Error:", error));
 }
 
 function loadApprovalRequests() {
-  fetch("/approval-requests")
-    .then((response) => response.json())
+  fetch("http://localhost:3001/approval-requests", {
+    headers: {
+      role: "HR Manager",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       const approvalRequestsTable = document.getElementById(
         "approval-requests-table"
@@ -374,16 +465,16 @@ function loadApprovalRequests() {
               </tr>
           </thead>
           <tbody>`;
-      data.forEach((request) => {
+      data.forEach((approvalRequest) => {
         table += `<tr>
-                        <td>${request.ID}</td>
-                        <td>${request.Approver}</td>
-                        <td>${request.LeaveRequest}</td>
-                        <td>${request.Comment}</td>
-                        <td>${request.Status}</td>
+                        <td>${approvalRequest.ID}</td>
+                        <td>${approvalRequest.ApproverID}</td>
+                        <td>${approvalRequest.LeaveRequestID}</td>
+                        <td>${approvalRequest.Comment}</td>
+                        <td>${approvalRequest.Status}</td>
                         <td>
-                          <button class="btn btn-sm btn-success" onclick="approveRequest(${request.ID})">Approve</button>
-                          <button class="btn btn-sm btn-danger" onclick="rejectRequest(${request.ID})">Reject</button>
+                          <button class="btn btn-sm btn-warning" onclick="editApprovalRequest(${approvalRequest.ID})">Edit</button>
+                          <button class="btn btn-sm btn-danger" onclick="deleteApprovalRequest(${approvalRequest.ID})">Delete</button>
                         </td>
                       </tr>`;
       });
@@ -393,25 +484,87 @@ function loadApprovalRequests() {
     .catch((error) => console.error("Error:", error));
 }
 
-function approveRequest(id) {
-  updateApprovalRequestStatus(id, "Approved");
-}
+function addApprovalRequest() {
+  const formData = new FormData(
+    document.getElementById("add-approval-request-form")
+  );
 
-function rejectRequest(id) {
-  updateApprovalRequestStatus(id, "Rejected");
-}
-
-function updateApprovalRequestStatus(id, status) {
-  fetch(`/approval-requests/${id}`, {
-    method: "PUT",
+  fetch("http://localhost:3001/approval-requests", {
+    method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      role: "HR Manager",
     },
-    body: JSON.stringify({ status }),
+    body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       console.log("Success:", data);
+      loadApprovalRequests(); // Refresh the approval requests table
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+function editApprovalRequest(id) {
+  fetch(`http://localhost:3001/approval-requests/${id}`, {
+    headers: {
+      role: "HR Manager",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
+    .then((approvalRequest) => {
+      document.getElementById("edit-approval-request-id").value =
+        approvalRequest.ID;
+      document.getElementById("edit-approver").value =
+        approvalRequest.ApproverID;
+      document.getElementById("edit-leave-request").value =
+        approvalRequest.LeaveRequestID;
+      document.getElementById("edit-comment").value = approvalRequest.Comment;
+      document.getElementById("edit-status").value = approvalRequest.Status;
+      document.getElementById("edit-approval-request").style.display = "block";
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+function updateApprovalRequest() {
+  const id = document.getElementById("edit-approval-request-id").value;
+  const formData = new FormData(
+    document.getElementById("edit-approval-request-form")
+  );
+
+  fetch(`http://localhost:3001/approval-requests/${id}`, {
+    method: "PUT",
+    headers: {
+      role: "HR Manager",
+    },
+    body: formData,
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Success:", data);
+      loadApprovalRequests(); // Refresh the approval requests table
+      document.getElementById("edit-approval-request").style.display = "none";
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+function deleteApprovalRequest(id) {
+  fetch(`http://localhost:3001/approval-requests/${id}`, {
+    method: "DELETE",
+    headers: {
+      role: "HR Manager",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
       loadApprovalRequests(); // Refresh the approval requests table
     })
     .catch((error) => console.error("Error:", error));

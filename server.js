@@ -1,9 +1,18 @@
 const express = require("express");
 const mysql = require("mysql");
+const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const app = express();
 const port = 3001;
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://127.0.0.1:5500"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization", "role"],
+  })
+);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -23,8 +32,11 @@ const upload = multer({ storage: storage });
 function checkRole(role) {
   return (req, res, next) => {
     const userRole = req.headers["role"];
+    console.log(`Checking role: ${role}, received: ${userRole}`); // Лог для налагодження
     if (userRole !== role) {
-      return res.status(403).json({ message: "Access denied" });
+      return res.status(403).json({
+        message: `Access denied: incorrect role (expected: ${role}, received: ${userRole})`,
+      });
     }
     next();
   };
@@ -69,6 +81,7 @@ app.get("/employees/:id", checkRole("HR Manager"), (req, res) => {
       console.error("MySQL Query Error: ", err);
       res.status(500).send(err);
     } else {
+      console.log("Query Results:", results);
       res.send(results[0]);
     }
   });
@@ -261,9 +274,9 @@ app.get("/leave-requests/:id", checkRole("Employee"), (req, res) => {
 app.post("/leave-requests", checkRole("Employee"), (req, res) => {
   const newLeaveRequest = req.body;
   const sql =
-    "INSERT INTO LeaveRequests (Employee, AbsenceReason, StartDate, EndDate, Comment, Status) VALUES (?, ?, ?, ?, ?, ?)";
+    "INSERT INTO LeaveRequests (EmployeeID, AbsenceReason, StartDate, EndDate, Comment, Status) VALUES (?, ?, ?, ?, ?, ?)";
   const values = [
-    newLeaveRequest.employee,
+    newLeaveRequest.employeeID,
     newLeaveRequest.absenceReason,
     newLeaveRequest.startDate,
     newLeaveRequest.endDate,
@@ -281,12 +294,12 @@ app.post("/leave-requests", checkRole("Employee"), (req, res) => {
   });
 });
 
-app.put("/leave-requests/:id", checkRole("HR Manager"), (req, res) => {
+app.put("/leave-requests/:id", checkRole("Employee"), (req, res) => {
   const updatedLeaveRequest = req.body;
   const sql =
-    "UPDATE LeaveRequests SET Employee = ?, AbsenceReason = ?, StartDate = ?, EndDate = ?, Comment = ?, Status = ? WHERE ID = ?";
+    "UPDATE LeaveRequests SET EmployeeID = ?, AbsenceReason = ?, StartDate = ?, EndDate = ?, Comment = ?, Status = ? WHERE ID = ?";
   const values = [
-    updatedLeaveRequest.employee,
+    updatedLeaveRequest.employeeID,
     updatedLeaveRequest.absenceReason,
     updatedLeaveRequest.startDate,
     updatedLeaveRequest.endDate,
@@ -345,12 +358,11 @@ app.get("/approval-requests/:id", checkRole("HR Manager"), (req, res) => {
 app.post("/approval-requests", checkRole("HR Manager"), (req, res) => {
   const newApprovalRequest = req.body;
   const sql =
-    "INSERT INTO ApprovalRequests (Approver, LeaveRequest, Comment, Status) VALUES (?, ?, ?, ?)";
+    "INSERT INTO ApprovalRequests (LeaveRequestID, ApprovalStatus, Comment) VALUES (?, ?, ?)";
   const values = [
-    newApprovalRequest.approver,
-    newApprovalRequest.leaveRequest,
+    newApprovalRequest.leaveRequestID,
+    newApprovalRequest.approvalStatus,
     newApprovalRequest.comment,
-    newApprovalRequest.status,
   ];
 
   db.query(sql, values, (err, result) => {
@@ -366,12 +378,11 @@ app.post("/approval-requests", checkRole("HR Manager"), (req, res) => {
 app.put("/approval-requests/:id", checkRole("HR Manager"), (req, res) => {
   const updatedApprovalRequest = req.body;
   const sql =
-    "UPDATE ApprovalRequests SET Approver = ?, LeaveRequest = ?, Comment = ?, Status = ? WHERE ID = ?";
+    "UPDATE ApprovalRequests SET LeaveRequestID = ?, ApprovalStatus = ?, Comment = ? WHERE ID = ?";
   const values = [
-    updatedApprovalRequest.approver,
-    updatedApprovalRequest.leaveRequest,
+    updatedApprovalRequest.leaveRequestID,
+    updatedApprovalRequest.approvalStatus,
     updatedApprovalRequest.comment,
-    updatedApprovalRequest.status,
     req.params.id,
   ];
 
