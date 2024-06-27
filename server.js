@@ -1,9 +1,36 @@
 const express = require("express");
 const mysql = require("mysql");
+const multer = require("multer");
 const path = require("path");
 const app = express();
 const port = 3001;
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// Middleware для перевірки ролі користувача
+function checkRole(role) {
+  return (req, res, next) => {
+    const userRole = req.headers["role"];
+    if (userRole !== role) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+    next();
+  };
+}
+
+// Налаштування бази даних
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -20,20 +47,7 @@ db.connect((err) => {
 });
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname)));
-
-// Middleware для перевірки ролі користувача
-function checkRole(role) {
-  return (req, res, next) => {
-    // Приклад: отримуємо роль з запиту (може бути через токен або інший метод аутентифікації)
-    const userRole = req.headers["role"];
-
-    if (userRole !== role) {
-      return res.status(403).json({ message: "Access denied" });
-    }
-    next();
-  };
-}
+app.use(express.static("public"));
 
 // Employees endpoints
 app.get("/employees", checkRole("HR Manager"), (req, res) => {
@@ -60,54 +74,68 @@ app.get("/employees/:id", checkRole("HR Manager"), (req, res) => {
   });
 });
 
-app.post("/employees", checkRole("HR Manager"), (req, res) => {
-  const newEmployee = req.body;
-  const sql =
-    "INSERT INTO Employees (FullName, Subdivision, Position, Status, PeoplePartner, OutOfOfficeBalance, Photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
-  const values = [
-    newEmployee.fullName,
-    newEmployee.subdivision,
-    newEmployee.position,
-    newEmployee.status,
-    newEmployee.peoplePartner,
-    newEmployee.outOfOfficeBalance,
-    newEmployee.photo,
-  ];
+app.post(
+  "/employees",
+  checkRole("HR Manager"),
+  upload.single("photo"),
+  (req, res) => {
+    const newEmployee = req.body;
+    const photo = req.file ? `/uploads/${req.file.filename}` : null;
+    const sql =
+      "INSERT INTO Employees (FullName, Subdivision, Position, Status, PeoplePartner, OutOfOfficeBalance, Photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    const values = [
+      newEmployee["full-name"],
+      newEmployee.subdivision,
+      newEmployee.position,
+      newEmployee.status,
+      newEmployee["people-partner"],
+      newEmployee["out-of-office-balance"],
+      photo,
+    ];
 
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error("MySQL Insert Error: ", err);
-      res.status(500).send(err);
-    } else {
-      res.send({ message: "Employee added", id: result.insertId });
-    }
-  });
-});
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error("MySQL Insert Error: ", err);
+        res.status(500).send(err);
+      } else {
+        res.send({ message: "Employee added", id: result.insertId });
+      }
+    });
+  }
+);
 
-app.put("/employees/:id", checkRole("HR Manager"), (req, res) => {
-  const updatedEmployee = req.body;
-  const sql =
-    "UPDATE Employees SET FullName = ?, Subdivision = ?, Position = ?, Status = ?, PeoplePartner = ?, OutOfOfficeBalance = ?, Photo = ? WHERE ID = ?";
-  const values = [
-    updatedEmployee.fullName,
-    updatedEmployee.subdivision,
-    updatedEmployee.position,
-    updatedEmployee.status,
-    updatedEmployee.peoplePartner,
-    updatedEmployee.outOfOfficeBalance,
-    updatedEmployee.photo,
-    req.params.id,
-  ];
+app.put(
+  "/employees/:id",
+  checkRole("HR Manager"),
+  upload.single("photo"),
+  (req, res) => {
+    const updatedEmployee = req.body;
+    const photo = req.file
+      ? `/uploads/${req.file.filename}`
+      : updatedEmployee.photo;
+    const sql =
+      "UPDATE Employees SET FullName = ?, Subdivision = ?, Position = ?, Status = ?, PeoplePartner = ?, OutOfOfficeBalance = ?, Photo = ? WHERE ID = ?";
+    const values = [
+      updatedEmployee["full-name"],
+      updatedEmployee.subdivision,
+      updatedEmployee.position,
+      updatedEmployee.status,
+      updatedEmployee["people-partner"],
+      updatedEmployee["out-of-office-balance"],
+      photo,
+      req.params.id,
+    ];
 
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error("MySQL Update Error: ", err);
-      res.status(500).send(err);
-    } else {
-      res.send({ message: "Employee updated" });
-    }
-  });
-});
+    db.query(sql, values, (err, result) => {
+      if (err) {
+        console.error("MySQL Update Error: ", err);
+        res.status(500).send(err);
+      } else {
+        res.send({ message: "Employee updated" });
+      }
+    });
+  }
+);
 
 app.delete("/employees/:id", checkRole("HR Manager"), (req, res) => {
   const sql = "DELETE FROM Employees WHERE ID = ?";
@@ -253,7 +281,7 @@ app.post("/leave-requests", checkRole("Employee"), (req, res) => {
   });
 });
 
-app.put("/leave-requests/:id", checkRole("Employee"), (req, res) => {
+app.put("/leave-requests/:id", checkRole("HR Manager"), (req, res) => {
   const updatedLeaveRequest = req.body;
   const sql =
     "UPDATE LeaveRequests SET Employee = ?, AbsenceReason = ?, StartDate = ?, EndDate = ?, Comment = ?, Status = ? WHERE ID = ?";

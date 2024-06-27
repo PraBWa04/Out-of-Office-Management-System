@@ -44,60 +44,53 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadEmployees() {
-  fetch("http://localhost:3001/employees")
+  fetch("/employees")
     .then((response) => response.json())
     .then((data) => {
       const employeesTable = document.getElementById("employees-table");
-      let table =
-        "<tr><th>ID</th><th>Full Name</th><th>Subdivision</th><th>Position</th><th>Status</th><th>People Partner</th><th>Out of Office Balance</th><th>Photo</th><th>Actions</th></tr>";
+      let table = `
+          <thead class="thead-dark">
+              <tr>
+                  <th>ID</th>
+                  <th>Full Name</th>
+                  <th>Subdivision</th>
+                  <th>Position</th>
+                  <th>Status</th>
+                  <th>People Partner</th>
+                  <th>Out of Office Balance</th>
+                  <th>Photo</th>
+                  <th>Actions</th>
+              </tr>
+          </thead>
+          <tbody>`;
       data.forEach((employee) => {
         table += `<tr>
-                      <td>${employee.ID}</td>
-                      <td>${employee.FullName}</td>
-                      <td>${employee.Subdivision}</td>
-                      <td>${employee.Position}</td>
-                      <td>${employee.Status}</td>
-                      <td>${employee.PeoplePartner}</td>
-                      <td>${employee.OutOfOfficeBalance}</td>
-                      <td>${employee.Photo}</td>
-                      <td>
-                        <button onclick="editEmployee(${employee.ID})">Edit</button>
-                        <button onclick="deleteEmployee(${employee.ID})">Delete</button>
-                      </td>
-                    </tr>`;
+                        <td>${employee.ID}</td>
+                        <td>${employee.FullName}</td>
+                        <td>${employee.Subdivision}</td>
+                        <td>${employee.Position}</td>
+                        <td>${employee.Status}</td>
+                        <td>${employee.PeoplePartner}</td>
+                        <td>${employee.OutOfOfficeBalance}</td>
+                        <td><img src="${employee.Photo}" alt="Employee Photo" class="img-thumbnail" style="max-width: 50px;"></td>
+                        <td>
+                          <button class="btn btn-sm btn-warning" onclick="editEmployee(${employee.ID})">Edit</button>
+                          <button class="btn btn-sm btn-danger" onclick="deleteEmployee(${employee.ID})">Delete</button>
+                        </td>
+                      </tr>`;
       });
+      table += `</tbody>`;
       employeesTable.innerHTML = table;
     })
     .catch((error) => console.error("Error:", error));
 }
 
 function addEmployee() {
-  const fullName = document.getElementById("full-name").value;
-  const subdivision = document.getElementById("subdivision").value;
-  const position = document.getElementById("position").value;
-  const status = document.getElementById("status").value;
-  const peoplePartner = document.getElementById("people-partner").value;
-  const outOfOfficeBalance = document.getElementById(
-    "out-of-office-balance"
-  ).value;
-  const photo = document.getElementById("photo").value;
+  const formData = new FormData(document.getElementById("add-employee-form"));
 
-  const newEmployee = {
-    fullName,
-    subdivision,
-    position,
-    status,
-    peoplePartner: peoplePartner ? peoplePartner : null,
-    outOfOfficeBalance,
-    photo,
-  };
-
-  fetch("http://localhost:3001/employees", {
+  fetch("/employees", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newEmployee),
+    body: formData,
   })
     .then((response) => response.json())
     .then((data) => {
@@ -108,7 +101,7 @@ function addEmployee() {
 }
 
 function editEmployee(id) {
-  fetch(`http://localhost:3001/employees/${id}`)
+  fetch(`/employees/${id}`)
     .then((response) => response.json())
     .then((employee) => {
       document.getElementById("edit-employee-id").value = employee.ID;
@@ -120,40 +113,18 @@ function editEmployee(id) {
         employee.PeoplePartner;
       document.getElementById("edit-out-of-office-balance").value =
         employee.OutOfOfficeBalance;
-      document.getElementById("edit-photo").value = employee.Photo;
       document.getElementById("edit-employee").style.display = "block";
     })
     .catch((error) => console.error("Error:", error));
 }
 
 function updateEmployee() {
+  const formData = new FormData(document.getElementById("edit-employee-form"));
   const id = document.getElementById("edit-employee-id").value;
-  const fullName = document.getElementById("edit-full-name").value;
-  const subdivision = document.getElementById("edit-subdivision").value;
-  const position = document.getElementById("edit-position").value;
-  const status = document.getElementById("edit-status").value;
-  const peoplePartner = document.getElementById("edit-people-partner").value;
-  const outOfOfficeBalance = document.getElementById(
-    "edit-out-of-office-balance"
-  ).value;
-  const photo = document.getElementById("edit-photo").value;
 
-  const updatedEmployee = {
-    fullName,
-    subdivision,
-    position,
-    status,
-    peoplePartner: peoplePartner ? peoplePartner : null,
-    outOfOfficeBalance,
-    photo,
-  };
-
-  fetch(`http://localhost:3001/employees/${id}`, {
+  fetch(`/employees/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedEmployee),
+    body: formData,
   })
     .then((response) => response.json())
     .then((data) => {
@@ -165,7 +136,7 @@ function updateEmployee() {
 }
 
 function deleteEmployee(id) {
-  fetch(`http://localhost:3001/employees/${id}`, {
+  fetch(`/employees/${id}`, {
     method: "DELETE",
   })
     .then((response) => response.json())
@@ -177,55 +148,51 @@ function deleteEmployee(id) {
 }
 
 function loadProjects() {
-  fetch("http://localhost:3001/projects")
+  fetch("/projects")
     .then((response) => response.json())
     .then((data) => {
       const projectsTable = document.getElementById("projects-table");
-      let table =
-        "<tr><th>ID</th><th>Project Type</th><th>Start Date</th><th>End Date</th><th>Project Manager</th><th>Comment</th><th>Status</th><th>Actions</th></tr>";
+      let table = `
+          <thead class="thead-dark">
+              <tr>
+                  <th>ID</th>
+                  <th>Project Type</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Project Manager</th>
+                  <th>Comment</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+              </tr>
+          </thead>
+          <tbody>`;
       data.forEach((project) => {
         table += `<tr>
-                      <td>${project.ID}</td>
-                      <td>${project.ProjectType}</td>
-                      <td>${project.StartDate}</td>
-                      <td>${project.EndDate}</td>
-                      <td>${project.ProjectManager}</td>
-                      <td>${project.Comment}</td>
-                      <td>${project.Status}</td>
-                      <td>
-                        <button onclick="editProject(${project.ID})">Edit</button>
-                        <button onclick="deleteProject(${project.ID})">Delete</button>
-                      </td>
-                    </tr>`;
+                        <td>${project.ID}</td>
+                        <td>${project.ProjectType}</td>
+                        <td>${project.StartDate}</td>
+                        <td>${project.EndDate}</td>
+                        <td>${project.ProjectManager}</td>
+                        <td>${project.Comment}</td>
+                        <td>${project.Status}</td>
+                        <td>
+                          <button class="btn btn-sm btn-warning" onclick="editProject(${project.ID})">Edit</button>
+                          <button class="btn btn-sm btn-danger" onclick="deleteProject(${project.ID})">Delete</button>
+                        </td>
+                      </tr>`;
       });
+      table += `</tbody>`;
       projectsTable.innerHTML = table;
     })
     .catch((error) => console.error("Error:", error));
 }
 
 function addProject() {
-  const projectType = document.getElementById("project-type").value;
-  const startDate = document.getElementById("start-date").value;
-  const endDate = document.getElementById("end-date").value;
-  const projectManager = document.getElementById("project-manager").value;
-  const comment = document.getElementById("comment").value;
-  const status = document.getElementById("project-status").value;
+  const formData = new FormData(document.getElementById("add-project-form"));
 
-  const newProject = {
-    projectType,
-    startDate,
-    endDate,
-    projectManager,
-    comment,
-    status,
-  };
-
-  fetch("http://localhost:3001/projects", {
+  fetch("/projects", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newProject),
+    body: formData,
   })
     .then((response) => response.json())
     .then((data) => {
@@ -236,7 +203,7 @@ function addProject() {
 }
 
 function editProject(id) {
-  fetch(`http://localhost:3001/projects/${id}`)
+  fetch(`/projects/${id}`)
     .then((response) => response.json())
     .then((project) => {
       document.getElementById("edit-project-id").value = project.ID;
@@ -253,29 +220,12 @@ function editProject(id) {
 }
 
 function updateProject() {
+  const formData = new FormData(document.getElementById("edit-project-form"));
   const id = document.getElementById("edit-project-id").value;
-  const projectType = document.getElementById("edit-project-type").value;
-  const startDate = document.getElementById("edit-start-date").value;
-  const endDate = document.getElementById("edit-end-date").value;
-  const projectManager = document.getElementById("edit-project-manager").value;
-  const comment = document.getElementById("edit-comment").value;
-  const status = document.getElementById("edit-project-status").value;
 
-  const updatedProject = {
-    projectType,
-    startDate,
-    endDate,
-    projectManager,
-    comment,
-    status,
-  };
-
-  fetch(`http://localhost:3001/projects/${id}`, {
+  fetch(`/projects/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedProject),
+    body: formData,
   })
     .then((response) => response.json())
     .then((data) => {
@@ -287,7 +237,7 @@ function updateProject() {
 }
 
 function deleteProject(id) {
-  fetch(`http://localhost:3001/projects/${id}`, {
+  fetch(`/projects/${id}`, {
     method: "DELETE",
   })
     .then((response) => response.json())
@@ -299,56 +249,55 @@ function deleteProject(id) {
 }
 
 function loadLeaveRequests() {
-  fetch("http://localhost:3001/leave-requests")
+  fetch("/leave-requests")
     .then((response) => response.json())
     .then((data) => {
       const leaveRequestsTable = document.getElementById(
         "leave-requests-table"
       );
-      let table =
-        "<tr><th>ID</th><th>Employee</th><th>Absence Reason</th><th>Start Date</th><th>End Date</th><th>Comment</th><th>Status</th><th>Actions</th></tr>";
+      let table = `
+          <thead class="thead-dark">
+              <tr>
+                  <th>ID</th>
+                  <th>Employee</th>
+                  <th>Absence Reason</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Comment</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+              </tr>
+          </thead>
+          <tbody>`;
       data.forEach((request) => {
         table += `<tr>
-                      <td>${request.ID}</td>
-                      <td>${request.Employee}</td>
-                      <td>${request.AbsenceReason}</td>
-                      <td>${request.StartDate}</td>
-                      <td>${request.EndDate}</td>
-                      <td>${request.Comment}</td>
-                      <td>${request.Status}</td>
-                      <td>
-                        <button onclick="editLeaveRequest(${request.ID})">Edit</button>
-                        <button onclick="deleteLeaveRequest(${request.ID})">Delete</button>
-                      </td>
-                    </tr>`;
+                        <td>${request.ID}</td>
+                        <td>${request.Employee}</td>
+                        <td>${request.AbsenceReason}</td>
+                        <td>${request.StartDate}</td>
+                        <td>${request.EndDate}</td>
+                        <td>${request.Comment}</td>
+                        <td>${request.Status}</td>
+                        <td>
+                          <button class="btn btn-sm btn-warning" onclick="editLeaveRequest(${request.ID})">Edit</button>
+                          <button class="btn btn-sm btn-danger" onclick="deleteLeaveRequest(${request.ID})">Delete</button>
+                        </td>
+                      </tr>`;
       });
+      table += `</tbody>`;
       leaveRequestsTable.innerHTML = table;
     })
     .catch((error) => console.error("Error:", error));
 }
 
 function addLeaveRequest() {
-  const employee = document.getElementById("leave-employee").value;
-  const absenceReason = document.getElementById("absence-reason").value;
-  const startDate = document.getElementById("leave-start-date").value;
-  const endDate = document.getElementById("leave-end-date").value;
-  const comment = document.getElementById("leave-comment").value;
+  const formData = new FormData(
+    document.getElementById("add-leave-request-form")
+  );
 
-  const newLeaveRequest = {
-    employee,
-    absenceReason,
-    startDate,
-    endDate,
-    comment,
-    status: "New",
-  };
-
-  fetch("http://localhost:3001/leave-requests", {
+  fetch("/leave-requests", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newLeaveRequest),
+    body: formData,
   })
     .then((response) => response.json())
     .then((data) => {
@@ -359,7 +308,7 @@ function addLeaveRequest() {
 }
 
 function editLeaveRequest(id) {
-  fetch(`http://localhost:3001/leave-requests/${id}`)
+  fetch(`/leave-requests/${id}`)
     .then((response) => response.json())
     .then((request) => {
       document.getElementById("edit-leave-request-id").value = request.ID;
@@ -376,28 +325,14 @@ function editLeaveRequest(id) {
 }
 
 function updateLeaveRequest() {
+  const formData = new FormData(
+    document.getElementById("edit-leave-request-form")
+  );
   const id = document.getElementById("edit-leave-request-id").value;
-  const employee = document.getElementById("edit-leave-employee").value;
-  const absenceReason = document.getElementById("edit-absence-reason").value;
-  const startDate = document.getElementById("edit-leave-start-date").value;
-  const endDate = document.getElementById("edit-leave-end-date").value;
-  const comment = document.getElementById("edit-leave-comment").value;
 
-  const updatedLeaveRequest = {
-    employee,
-    absenceReason,
-    startDate,
-    endDate,
-    comment,
-    status: "New",
-  };
-
-  fetch(`http://localhost:3001/leave-requests/${id}`, {
+  fetch(`/leave-requests/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedLeaveRequest),
+    body: formData,
   })
     .then((response) => response.json())
     .then((data) => {
@@ -409,7 +344,7 @@ function updateLeaveRequest() {
 }
 
 function deleteLeaveRequest(id) {
-  fetch(`http://localhost:3001/leave-requests/${id}`, {
+  fetch(`/leave-requests/${id}`, {
     method: "DELETE",
   })
     .then((response) => response.json())
@@ -421,27 +356,38 @@ function deleteLeaveRequest(id) {
 }
 
 function loadApprovalRequests() {
-  fetch("http://localhost:3001/approval-requests")
+  fetch("/approval-requests")
     .then((response) => response.json())
     .then((data) => {
       const approvalRequestsTable = document.getElementById(
         "approval-requests-table"
       );
-      let table =
-        "<tr><th>ID</th><th>Approver</th><th>Leave Request</th><th>Comment</th><th>Status</th><th>Actions</th></tr>";
+      let table = `
+          <thead class="thead-dark">
+              <tr>
+                  <th>ID</th>
+                  <th>Approver</th>
+                  <th>Leave Request</th>
+                  <th>Comment</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+              </tr>
+          </thead>
+          <tbody>`;
       data.forEach((request) => {
         table += `<tr>
-                      <td>${request.ID}</td>
-                      <td>${request.Approver}</td>
-                      <td>${request.LeaveRequest}</td>
-                      <td>${request.Comment}</td>
-                      <td>${request.Status}</td>
-                      <td>
-                        <button onclick="approveRequest(${request.ID})">Approve</button>
-                        <button onclick="rejectRequest(${request.ID})">Reject</button>
-                      </td>
-                    </tr>`;
+                        <td>${request.ID}</td>
+                        <td>${request.Approver}</td>
+                        <td>${request.LeaveRequest}</td>
+                        <td>${request.Comment}</td>
+                        <td>${request.Status}</td>
+                        <td>
+                          <button class="btn btn-sm btn-success" onclick="approveRequest(${request.ID})">Approve</button>
+                          <button class="btn btn-sm btn-danger" onclick="rejectRequest(${request.ID})">Reject</button>
+                        </td>
+                      </tr>`;
       });
+      table += `</tbody>`;
       approvalRequestsTable.innerHTML = table;
     })
     .catch((error) => console.error("Error:", error));
@@ -456,7 +402,7 @@ function rejectRequest(id) {
 }
 
 function updateApprovalRequestStatus(id, status) {
-  fetch(`http://localhost:3001/approval-requests/${id}`, {
+  fetch(`/approval-requests/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
