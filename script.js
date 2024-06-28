@@ -50,6 +50,7 @@ function loadEmployees() {
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -103,6 +104,7 @@ function addEmployee() {
     body: formData,
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -120,6 +122,7 @@ function editEmployee(id) {
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -150,6 +153,7 @@ function updateEmployee() {
     body: formData,
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -169,6 +173,7 @@ function deleteEmployee(id) {
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       loadEmployees(); // Refresh the employees table
     })
@@ -176,12 +181,14 @@ function deleteEmployee(id) {
 }
 
 function loadProjects() {
+  console.log("Fetching projects with role: Project Manager");
   fetch("http://localhost:3001/projects", {
     headers: {
       role: "Project Manager",
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -233,6 +240,7 @@ function addProject() {
     body: formData,
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -250,6 +258,7 @@ function editProject(id) {
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -279,6 +288,7 @@ function updateProject() {
     body: formData,
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -298,6 +308,7 @@ function deleteProject(id) {
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       loadProjects(); // Refresh the projects table
     })
@@ -311,6 +322,7 @@ function loadLeaveRequests() {
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -366,6 +378,7 @@ function addLeaveRequest() {
     body: formData,
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -383,6 +396,7 @@ function editLeaveRequest(id) {
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -414,6 +428,7 @@ function updateLeaveRequest() {
     body: formData,
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -433,6 +448,7 @@ function deleteLeaveRequest(id) {
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       loadLeaveRequests(); // Refresh the leave requests table
     })
@@ -446,6 +462,7 @@ function loadApprovalRequests() {
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -497,6 +514,7 @@ function addApprovalRequest() {
     body: formData,
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -514,6 +532,7 @@ function editApprovalRequest(id) {
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -545,6 +564,7 @@ function updateApprovalRequest() {
     body: formData,
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
@@ -564,6 +584,7 @@ function deleteApprovalRequest(id) {
     },
   })
     .then((response) => {
+      console.log("Response status:", response.status);
       if (!response.ok) throw new Error("Network response was not ok");
       loadApprovalRequests(); // Refresh the approval requests table
     })

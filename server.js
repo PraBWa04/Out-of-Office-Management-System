@@ -81,7 +81,6 @@ app.get("/employees/:id", checkRole("HR Manager"), (req, res) => {
       console.error("MySQL Query Error: ", err);
       res.status(500).send(err);
     } else {
-      console.log("Query Results:", results);
       res.send(results[0]);
     }
   });
@@ -164,6 +163,7 @@ app.delete("/employees/:id", checkRole("HR Manager"), (req, res) => {
 
 // Projects endpoints
 app.get("/projects", checkRole("Project Manager"), (req, res) => {
+  console.log("Received request to /projects with role: Project Manager");
   let sql = "SELECT * FROM Projects";
   db.query(sql, (err, results) => {
     if (err) {
@@ -192,12 +192,12 @@ app.post("/projects", checkRole("Project Manager"), (req, res) => {
   const sql =
     "INSERT INTO Projects (ProjectType, StartDate, EndDate, ProjectManager, Comment, Status) VALUES (?, ?, ?, ?, ?, ?)";
   const values = [
-    newProject.projectType,
-    newProject.startDate,
-    newProject.endDate,
-    newProject.projectManager,
-    newProject.comment,
-    newProject.status,
+    newProject.ProjectType,
+    newProject.StartDate,
+    newProject.EndDate,
+    newProject.ProjectManager,
+    newProject.Comment,
+    newProject.Status,
   ];
 
   db.query(sql, values, (err, result) => {
@@ -215,12 +215,12 @@ app.put("/projects/:id", checkRole("Project Manager"), (req, res) => {
   const sql =
     "UPDATE Projects SET ProjectType = ?, StartDate = ?, EndDate = ?, ProjectManager = ?, Comment = ?, Status = ? WHERE ID = ?";
   const values = [
-    updatedProject.projectType,
-    updatedProject.startDate,
-    updatedProject.endDate,
-    updatedProject.projectManager,
-    updatedProject.comment,
-    updatedProject.status,
+    updatedProject.ProjectType,
+    updatedProject.StartDate,
+    updatedProject.EndDate,
+    updatedProject.ProjectManager,
+    updatedProject.Comment,
+    updatedProject.Status,
     req.params.id,
   ];
 
@@ -276,12 +276,12 @@ app.post("/leave-requests", checkRole("Employee"), (req, res) => {
   const sql =
     "INSERT INTO LeaveRequests (EmployeeID, AbsenceReason, StartDate, EndDate, Comment, Status) VALUES (?, ?, ?, ?, ?, ?)";
   const values = [
-    newLeaveRequest.employeeID,
-    newLeaveRequest.absenceReason,
-    newLeaveRequest.startDate,
-    newLeaveRequest.endDate,
-    newLeaveRequest.comment,
-    newLeaveRequest.status,
+    newLeaveRequest.EmployeeID,
+    newLeaveRequest.AbsenceReason,
+    newLeaveRequest.StartDate,
+    newLeaveRequest.EndDate,
+    newLeaveRequest.Comment,
+    newLeaveRequest.Status,
   ];
 
   db.query(sql, values, (err, result) => {
@@ -299,12 +299,12 @@ app.put("/leave-requests/:id", checkRole("Employee"), (req, res) => {
   const sql =
     "UPDATE LeaveRequests SET EmployeeID = ?, AbsenceReason = ?, StartDate = ?, EndDate = ?, Comment = ?, Status = ? WHERE ID = ?";
   const values = [
-    updatedLeaveRequest.employeeID,
-    updatedLeaveRequest.absenceReason,
-    updatedLeaveRequest.startDate,
-    updatedLeaveRequest.endDate,
-    updatedLeaveRequest.comment,
-    updatedLeaveRequest.status,
+    updatedLeaveRequest.EmployeeID,
+    updatedLeaveRequest.AbsenceReason,
+    updatedLeaveRequest.StartDate,
+    updatedLeaveRequest.EndDate,
+    updatedLeaveRequest.Comment,
+    updatedLeaveRequest.Status,
     req.params.id,
   ];
 
@@ -360,9 +360,9 @@ app.post("/approval-requests", checkRole("HR Manager"), (req, res) => {
   const sql =
     "INSERT INTO ApprovalRequests (LeaveRequestID, ApprovalStatus, Comment) VALUES (?, ?, ?)";
   const values = [
-    newApprovalRequest.leaveRequestID,
-    newApprovalRequest.approvalStatus,
-    newApprovalRequest.comment,
+    newApprovalRequest.LeaveRequestID,
+    newApprovalRequest.ApprovalStatus,
+    newApprovalRequest.Comment,
   ];
 
   db.query(sql, values, (err, result) => {
@@ -380,9 +380,9 @@ app.put("/approval-requests/:id", checkRole("HR Manager"), (req, res) => {
   const sql =
     "UPDATE ApprovalRequests SET LeaveRequestID = ?, ApprovalStatus = ?, Comment = ? WHERE ID = ?";
   const values = [
-    updatedApprovalRequest.leaveRequestID,
-    updatedApprovalRequest.approvalStatus,
-    updatedApprovalRequest.comment,
+    updatedApprovalRequest.LeaveRequestID,
+    updatedApprovalRequest.ApprovalStatus,
+    updatedApprovalRequest.Comment,
     req.params.id,
   ];
 

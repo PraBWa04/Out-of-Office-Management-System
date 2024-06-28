@@ -16,23 +16,23 @@ CREATE TABLE IF NOT EXISTS Employees (
 
 CREATE TABLE IF NOT EXISTS LeaveRequests (
     ID INT AUTO_INCREMENT PRIMARY KEY,
-    Employee INT NOT NULL,
+    EmployeeID INT NOT NULL,
     AbsenceReason VARCHAR(255) NOT NULL,
     StartDate DATE NOT NULL,
     EndDate DATE NOT NULL,
     Comment TEXT,
     Status ENUM('New', 'Submitted', 'Approved', 'Rejected', 'Cancelled') NOT NULL DEFAULT 'New',
-    FOREIGN KEY (Employee) REFERENCES Employees(ID)
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(ID)
 );
 
 CREATE TABLE IF NOT EXISTS ApprovalRequests (
     ID INT AUTO_INCREMENT PRIMARY KEY,
-    Approver INT NOT NULL,
-    LeaveRequest INT NOT NULL,
+    ApproverID INT NOT NULL,
+    LeaveRequestID INT NOT NULL,
     Status ENUM('New', 'Approved', 'Rejected') NOT NULL DEFAULT 'New',
     Comment TEXT,
-    FOREIGN KEY (Approver) REFERENCES Employees(ID),
-    FOREIGN KEY (LeaveRequest) REFERENCES LeaveRequests(ID)
+    FOREIGN KEY (ApproverID) REFERENCES Employees(ID),
+    FOREIGN KEY (LeaveRequestID) REFERENCES LeaveRequests(ID)
 );
 
 CREATE TABLE IF NOT EXISTS Projects (
