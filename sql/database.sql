@@ -1,24 +1,3 @@
-# Out of Office Management System
-
-## Project description
-
-This project is a leave management system for company employees. It allows HR managers, project managers, and employees to manage leaves, projects, and approval requests.
-
-## Features
-
-- CRUD operations for employees, projects, leave requests, and approval requests.
-- Role-based access control for different roles (HR Manager, Project Manager, Employee).
-
-## Technologies
-
-- Node.js
-- Express.js
-- MySQL
-- Postman for testing API
-
-## SQL Queries to Create Database
-
-```sql
 CREATE DATABASE IF NOT EXISTS OutOfOfficeDB;
 
 USE OutOfOfficeDB;
@@ -69,4 +48,3 @@ CREATE TABLE IF NOT EXISTS Projects (
 
 INSERT INTO Employees (FullName, Subdivision, Position, Status, PeoplePartner, OutOfOfficeBalance, Photo)
 VALUES ('John Doe', 'IT', 'Developer', 'Active', NULL, 10, 'http://example.com/photo.jpg');
-```
