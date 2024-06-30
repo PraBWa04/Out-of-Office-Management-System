@@ -32,7 +32,7 @@ const upload = multer({ storage: storage });
 function checkRole(role) {
   return (req, res, next) => {
     const userRole = req.headers["role"];
-    console.log(`Checking role: ${role}, received: ${userRole}`); // Лог для налагодження
+    console.log(`Checking role: ${role}, received: ${userRole}`);
     if (userRole !== role) {
       return res.status(403).json({
         message: `Access denied: incorrect role (expected: ${role}, received: ${userRole})`,
@@ -358,8 +358,9 @@ app.get("/approval-requests/:id", checkRole("HR Manager"), (req, res) => {
 app.post("/approval-requests", checkRole("HR Manager"), (req, res) => {
   const newApprovalRequest = req.body;
   const sql =
-    "INSERT INTO ApprovalRequests (LeaveRequestID, ApprovalStatus, Comment) VALUES (?, ?, ?)";
+    "INSERT INTO ApprovalRequests (ApproverID, LeaveRequestID, ApprovalStatus, Comment) VALUES (?, ?, ?, ?)";
   const values = [
+    newApprovalRequest.ApproverID,
     newApprovalRequest.LeaveRequestID,
     newApprovalRequest.ApprovalStatus,
     newApprovalRequest.Comment,
@@ -378,8 +379,9 @@ app.post("/approval-requests", checkRole("HR Manager"), (req, res) => {
 app.put("/approval-requests/:id", checkRole("HR Manager"), (req, res) => {
   const updatedApprovalRequest = req.body;
   const sql =
-    "UPDATE ApprovalRequests SET LeaveRequestID = ?, ApprovalStatus = ?, Comment = ? WHERE ID = ?";
+    "UPDATE ApprovalRequests SET ApproverID = ?, LeaveRequestID = ?, ApprovalStatus = ?, Comment = ? WHERE ID = ?";
   const values = [
+    updatedApprovalRequest.ApproverID,
     updatedApprovalRequest.LeaveRequestID,
     updatedApprovalRequest.ApprovalStatus,
     updatedApprovalRequest.Comment,

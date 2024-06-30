@@ -45,6 +45,20 @@ document.addEventListener("DOMContentLoaded", function () {
       event.preventDefault();
       updateLeaveRequest();
     });
+
+  document
+    .getElementById("add-approval-request-form")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+      addApprovalRequest();
+    });
+
+  document
+    .getElementById("edit-approval-request-form")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+      updateApprovalRequest();
+    });
 });
 
 function loadEmployees() {
@@ -53,7 +67,10 @@ function loadEmployees() {
       role: "HR Manager",
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       const employeesTable = document.getElementById("employees-table");
       let table = `<thead class="thead-dark">
@@ -70,22 +87,24 @@ function loadEmployees() {
             </tr>
          </thead>
          <tbody>`;
-      data.forEach((employee) => {
-        table += `<tr>
-                    <td>${employee.ID}</td>
-                    <td>${employee.FullName}</td>
-                    <td>${employee.Subdivision}</td>
-                    <td>${employee.Position}</td>
-                    <td>${employee.Status}</td>
-                    <td>${employee.PeoplePartner}</td>
-                    <td>${employee.OutOfOfficeBalance}</td>
-                    <td><img src="${employee.Photo}" alt="Employee Photo" class="img-thumbnail" style="max-width: 50px;"></td>
-                    <td>
-                      <button class="btn btn-sm btn-warning" onclick="editEmployee(${employee.ID})">Edit</button>
-                      <button class="btn btn-sm btn-danger" onclick="deleteEmployee(${employee.ID})">Delete</button>
-                    </td>
-                  </tr>`;
-      });
+      if (Array.isArray(data)) {
+        data.forEach((employee) => {
+          table += `<tr>
+                      <td>${employee.ID}</td>
+                      <td>${employee.FullName}</td>
+                      <td>${employee.Subdivision}</td>
+                      <td>${employee.Position}</td>
+                      <td>${employee.Status}</td>
+                      <td>${employee.PeoplePartner}</td>
+                      <td>${employee.OutOfOfficeBalance}</td>
+                      <td><img src="${employee.Photo}" alt="Employee Photo" class="img-thumbnail" style="max-width: 50px;"></td>
+                      <td>
+                        <button class="btn btn-sm btn-warning" onclick="editEmployee(${employee.ID})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteEmployee(${employee.ID})">Delete</button>
+                      </td>
+                    </tr>`;
+        });
+      }
       table += `</tbody>`;
       employeesTable.innerHTML = table;
     })
@@ -102,7 +121,10 @@ function addEmployee() {
     },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       loadEmployees();
     })
@@ -115,7 +137,10 @@ function editEmployee(id) {
       role: "HR Manager",
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((employee) => {
       document.getElementById("edit-employee-id").value = employee.ID;
       document.getElementById("edit-full-name").value = employee.FullName;
@@ -142,7 +167,10 @@ function updateEmployee() {
     },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       loadEmployees();
       document.getElementById("edit-employee").style.display = "none";
@@ -169,7 +197,10 @@ function loadProjects() {
       role: "Project Manager",
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       const projectsTable = document.getElementById("projects-table");
       let table = `<thead class="thead-dark">
@@ -185,21 +216,23 @@ function loadProjects() {
             </tr>
          </thead>
          <tbody>`;
-      data.forEach((project) => {
-        table += `<tr>
-                    <td>${project.ID}</td>
-                    <td>${project.ProjectType}</td>
-                    <td>${project.StartDate}</td>
-                    <td>${project.EndDate}</td>
-                    <td>${project.ProjectManager}</td>
-                    <td>${project.Comment}</td>
-                    <td>${project.Status}</td>
-                    <td>
-                      <button class="btn btn-sm btn-warning" onclick="editProject(${project.ID})">Edit</button>
-                      <button class="btn btn-sm btn-danger" onclick="deleteProject(${project.ID})">Delete</button>
-                    </td>
-                  </tr>`;
-      });
+      if (Array.isArray(data)) {
+        data.forEach((project) => {
+          table += `<tr>
+                      <td>${project.ID}</td>
+                      <td>${project.ProjectType}</td>
+                      <td>${project.StartDate}</td>
+                      <td>${project.EndDate}</td>
+                      <td>${project.ProjectManager}</td>
+                      <td>${project.Comment}</td>
+                      <td>${project.Status}</td>
+                      <td>
+                        <button class="btn btn-sm btn-warning" onclick="editProject(${project.ID})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProject(${project.ID})">Delete</button>
+                      </td>
+                    </tr>`;
+        });
+      }
       table += `</tbody>`;
       projectsTable.innerHTML = table;
     })
@@ -216,7 +249,10 @@ function addProject() {
     },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       loadProjects();
     })
@@ -229,7 +265,10 @@ function editProject(id) {
       role: "Project Manager",
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((project) => {
       document.getElementById("edit-project-id").value = project.ID;
       document.getElementById("edit-project-type").value = project.ProjectType;
@@ -255,7 +294,10 @@ function updateProject() {
     },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       loadProjects();
       document.getElementById("edit-project").style.display = "none";
@@ -282,7 +324,10 @@ function loadLeaveRequests() {
       role: "Employee",
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       const leaveRequestsTable = document.getElementById(
         "leave-requests-table"
@@ -300,21 +345,23 @@ function loadLeaveRequests() {
             </tr>
          </thead>
          <tbody>`;
-      data.forEach((leaveRequest) => {
-        table += `<tr>
-                    <td>${leaveRequest.ID}</td>
-                    <td>${leaveRequest.EmployeeID}</td>
-                    <td>${leaveRequest.AbsenceReason}</td>
-                    <td>${leaveRequest.StartDate}</td>
-                    <td>${leaveRequest.EndDate}</td>
-                    <td>${leaveRequest.Comment}</td>
-                    <td>${leaveRequest.Status}</td>
-                    <td>
-                      <button class="btn btn-sm btn-warning" onclick="editLeaveRequest(${leaveRequest.ID})">Edit</button>
-                      <button class="btn btn-sm btn-danger" onclick="deleteLeaveRequest(${leaveRequest.ID})">Delete</button>
-                    </td>
-                  </tr>`;
-      });
+      if (Array.isArray(data)) {
+        data.forEach((leaveRequest) => {
+          table += `<tr>
+                      <td>${leaveRequest.ID}</td>
+                      <td>${leaveRequest.EmployeeID}</td>
+                      <td>${leaveRequest.AbsenceReason}</td>
+                      <td>${leaveRequest.StartDate}</td>
+                      <td>${leaveRequest.EndDate}</td>
+                      <td>${leaveRequest.Comment}</td>
+                      <td>${leaveRequest.Status}</td>
+                      <td>
+                        <button class="btn btn-sm btn-warning" onclick="editLeaveRequest(${leaveRequest.ID})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteLeaveRequest(${leaveRequest.ID})">Delete</button>
+                      </td>
+                    </tr>`;
+        });
+      }
       table += `</tbody>`;
       leaveRequestsTable.innerHTML = table;
     })
@@ -333,7 +380,10 @@ function addLeaveRequest() {
     },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       loadLeaveRequests();
     })
@@ -346,7 +396,10 @@ function editLeaveRequest(id) {
       role: "Employee",
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((leaveRequest) => {
       document.getElementById("edit-leave-request-id").value = leaveRequest.ID;
       document.getElementById("edit-leave-employee").value =
@@ -376,7 +429,10 @@ function updateLeaveRequest() {
     },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       loadLeaveRequests();
       document.getElementById("edit-leave-request").style.display = "none";
@@ -403,7 +459,10 @@ function loadApprovalRequests() {
       role: "HR Manager",
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       const approvalRequestsTable = document.getElementById(
         "approval-requests-table"
@@ -419,19 +478,21 @@ function loadApprovalRequests() {
             </tr>
          </thead>
          <tbody>`;
-      data.forEach((approvalRequest) => {
-        table += `<tr>
-                    <td>${approvalRequest.ID}</td>
-                    <td>${approvalRequest.ApproverID}</td>
-                    <td>${approvalRequest.LeaveRequestID}</td>
-                    <td>${approvalRequest.Comment}</td>
-                    <td>${approvalRequest.Status}</td>
-                    <td>
-                      <button class="btn btn-sm btn-warning" onclick="editApprovalRequest(${approvalRequest.ID})">Edit</button>
-                      <button class="btn btn-sm btn-danger" onclick="deleteApprovalRequest(${approvalRequest.ID})">Delete</button>
-                    </td>
-                  </tr>`;
-      });
+      if (Array.isArray(data)) {
+        data.forEach((approvalRequest) => {
+          table += `<tr>
+                      <td>${approvalRequest.ID}</td>
+                      <td>${approvalRequest.ApproverID}</td>
+                      <td>${approvalRequest.LeaveRequestID}</td>
+                      <td>${approvalRequest.Comment}</td>
+                      <td>${approvalRequest.Status}</td>
+                      <td>
+                        <button class="btn btn-sm btn-warning" onclick="editApprovalRequest(${approvalRequest.ID})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteApprovalRequest(${approvalRequest.ID})">Delete</button>
+                      </td>
+                    </tr>`;
+        });
+      }
       table += `</tbody>`;
       approvalRequestsTable.innerHTML = table;
     })
@@ -450,7 +511,10 @@ function addApprovalRequest() {
     },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       loadApprovalRequests();
     })
@@ -463,16 +527,21 @@ function editApprovalRequest(id) {
       role: "HR Manager",
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((approvalRequest) => {
       document.getElementById("edit-approval-request-id").value =
         approvalRequest.ID;
-      document.getElementById("edit-approver").value =
+      document.getElementById("edit-approval-approver").value =
         approvalRequest.ApproverID;
-      document.getElementById("edit-leave-request").value =
+      document.getElementById("edit-approval-leave-request").value =
         approvalRequest.LeaveRequestID;
-      document.getElementById("edit-comment").value = approvalRequest.Comment;
-      document.getElementById("edit-status").value = approvalRequest.Status;
+      document.getElementById("edit-approval-comment").value =
+        approvalRequest.Comment;
+      document.getElementById("edit-approval-status").value =
+        approvalRequest.Status;
       document.getElementById("edit-approval-request").style.display = "block";
     })
     .catch((error) => console.error("Error:", error));
@@ -491,7 +560,10 @@ function updateApprovalRequest() {
     },
     body: formData,
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) throw new Error("Network response was not ok");
+      return response.json();
+    })
     .then((data) => {
       loadApprovalRequests();
       document.getElementById("edit-approval-request").style.display = "none";
