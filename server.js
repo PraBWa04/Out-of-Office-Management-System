@@ -192,12 +192,12 @@ app.post("/projects", checkRole("Project Manager"), (req, res) => {
   const sql =
     "INSERT INTO Projects (ProjectType, StartDate, EndDate, ProjectManager, Comment, Status) VALUES (?, ?, ?, ?, ?, ?)";
   const values = [
-    newProject.ProjectType,
-    newProject.StartDate,
-    newProject.EndDate,
-    newProject.ProjectManager,
-    newProject.Comment,
-    newProject.Status,
+    newProject.projectType,
+    newProject.startDate,
+    newProject.endDate,
+    newProject.projectManager,
+    newProject.comment,
+    newProject.status,
   ];
 
   db.query(sql, values, (err, result) => {
@@ -215,12 +215,12 @@ app.put("/projects/:id", checkRole("Project Manager"), (req, res) => {
   const sql =
     "UPDATE Projects SET ProjectType = ?, StartDate = ?, EndDate = ?, ProjectManager = ?, Comment = ?, Status = ? WHERE ID = ?";
   const values = [
-    updatedProject.ProjectType,
-    updatedProject.StartDate,
-    updatedProject.EndDate,
-    updatedProject.ProjectManager,
-    updatedProject.Comment,
-    updatedProject.Status,
+    updatedProject.projectType,
+    updatedProject.startDate,
+    updatedProject.endDate,
+    updatedProject.projectManager,
+    updatedProject.comment,
+    updatedProject.status,
     req.params.id,
   ];
 
