@@ -4,61 +4,75 @@ document.addEventListener("DOMContentLoaded", function () {
   loadLeaveRequests();
   loadApprovalRequests();
 
-  document
-    .getElementById("add-employee-form")
-    .addEventListener("submit", function (event) {
+  const addEmployeeForm = document.getElementById("add-employee-form");
+  if (addEmployeeForm) {
+    addEmployeeForm.addEventListener("submit", function (event) {
       event.preventDefault();
       addEmployee();
     });
+  }
 
-  document
-    .getElementById("edit-employee-form")
-    .addEventListener("submit", function (event) {
+  const editEmployeeForm = document.getElementById("edit-employee-form");
+  if (editEmployeeForm) {
+    editEmployeeForm.addEventListener("submit", function (event) {
       event.preventDefault();
       updateEmployee();
     });
+  }
 
-  document
-    .getElementById("add-project-form")
-    .addEventListener("submit", function (event) {
+  const addProjectForm = document.getElementById("add-project-form");
+  if (addProjectForm) {
+    addProjectForm.addEventListener("submit", function (event) {
       event.preventDefault();
       addProject();
     });
+  }
 
-  document
-    .getElementById("edit-project-form")
-    .addEventListener("submit", function (event) {
+  const editProjectForm = document.getElementById("edit-project-form");
+  if (editProjectForm) {
+    editProjectForm.addEventListener("submit", function (event) {
       event.preventDefault();
       updateProject();
     });
+  }
 
-  document
-    .getElementById("add-leave-request-form")
-    .addEventListener("submit", function (event) {
+  const addLeaveRequestForm = document.getElementById("add-leave-request-form");
+  if (addLeaveRequestForm) {
+    addLeaveRequestForm.addEventListener("submit", function (event) {
       event.preventDefault();
       addLeaveRequest();
     });
+  }
 
-  document
-    .getElementById("edit-leave-request-form")
-    .addEventListener("submit", function (event) {
+  const editLeaveRequestForm = document.getElementById(
+    "edit-leave-request-form"
+  );
+  if (editLeaveRequestForm) {
+    editLeaveRequestForm.addEventListener("submit", function (event) {
       event.preventDefault();
       updateLeaveRequest();
     });
+  }
 
-  document
-    .getElementById("add-approval-request-form")
-    .addEventListener("submit", function (event) {
+  const addApprovalRequestForm = document.getElementById(
+    "add-approval-request-form"
+  );
+  if (addApprovalRequestForm) {
+    addApprovalRequestForm.addEventListener("submit", function (event) {
       event.preventDefault();
       addApprovalRequest();
     });
+  }
 
-  document
-    .getElementById("edit-approval-request-form")
-    .addEventListener("submit", function (event) {
+  const editApprovalRequestForm = document.getElementById(
+    "edit-approval-request-form"
+  );
+  if (editApprovalRequestForm) {
+    editApprovalRequestForm.addEventListener("submit", function (event) {
       event.preventDefault();
       updateApprovalRequest();
     });
+  }
 });
 
 function loadEmployees() {
