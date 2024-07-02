@@ -28,7 +28,7 @@ app.use(express.static("public"));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/uploads");
+    cb(null, uploadDir); // Ensure the upload directory is correct
   },
   filename: function (req, file, cb) {
     cb(
@@ -195,7 +195,7 @@ app.post("/projects", checkRole("Project Manager"), async (req, res) => {
     const { projectType, startDate, endDate, projectManager, comment, status } =
       req.body;
 
-    if (!projectType || !startDate || !endDate || !projectManager || !status) {
+    if (!projectType || !startDate || !projectManager || !status) {
       console.error("Missing required fields in projects", req.body);
       return res.status(400).send({ message: "Missing required fields" });
     }
@@ -225,7 +225,7 @@ app.put("/projects/:id", checkRole("Project Manager"), async (req, res) => {
     const { projectType, startDate, endDate, projectManager, comment, status } =
       req.body;
 
-    if (!projectType || !startDate || !endDate || !projectManager || !status) {
+    if (!projectType || !startDate || !projectManager || !status) {
       console.error("Missing required fields in projects", req.body);
       return res.status(400).send({ message: "Missing required fields" });
     }
