@@ -55,12 +55,6 @@ CREATE TABLE ApprovalRequests (
   FOREIGN KEY (LeaveRequestID) REFERENCES LeaveRequests(ID)
 );
 
--- Describe the tables to verify structure
-DESCRIBE Employees;
-DESCRIBE Projects;
-DESCRIBE LeaveRequests;
-DESCRIBE ApprovalRequests;
-
 -- Insert test data into the Employees table
 INSERT INTO Employees (FullName, Subdivision, Position, Status, PeoplePartner, OutOfOfficeBalance, Photo) VALUES 
 ('John Doe', 'IT', 'Developer', 'Active', NULL, 10, NULL),
@@ -92,3 +86,9 @@ CREATE INDEX idx_approval_request_status ON ApprovalRequests (ApprovalStatus);
 
 -- Insert a new approval request directly to test
 INSERT INTO ApprovalRequests (ApproverID, LeaveRequestID, ApprovalStatus, Comment) VALUES (2, 1, 'Approved', 'Leave approved for medical reasons');
+
+-- Describe the tables to verify structure
+DESCRIBE Employees;
+DESCRIBE Projects;
+DESCRIBE LeaveRequests;
+DESCRIBE ApprovalRequests;

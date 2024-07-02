@@ -28,7 +28,7 @@ app.use(express.static("public"));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, uploadDir); // Ensure the upload directory is correct
+    cb(null, "public/uploads");
   },
   filename: function (req, file, cb) {
     cb(
@@ -78,7 +78,7 @@ app.get("/employees", checkRole("HR Manager"), async (req, res) => {
     res.send(results);
   } catch (err) {
     console.error("MySQL Query Error: ", err);
-    res.status(500).send(err);
+    res.status(500).send({ message: "Error fetching employees", error: err });
   }
 });
 
@@ -90,7 +90,7 @@ app.get("/employees/:id", checkRole("HR Manager"), async (req, res) => {
     res.send(results[0]);
   } catch (err) {
     console.error("MySQL Query Error: ", err);
-    res.status(500).send(err);
+    res.status(500).send({ message: "Error fetching employee", error: err });
   }
 });
 
@@ -119,7 +119,7 @@ app.post(
       res.send({ message: "Employee added", id: result.insertId });
     } catch (err) {
       console.error("MySQL Insert Error: ", err);
-      res.status(500).send(err);
+      res.status(500).send({ message: "Error adding employee", error: err });
     }
   }
 );
@@ -150,7 +150,7 @@ app.put(
       res.send({ message: "Employee updated" });
     } catch (err) {
       console.error("MySQL Update Error: ", err);
-      res.status(500).send(err);
+      res.status(500).send({ message: "Error updating employee", error: err });
     }
   }
 );
@@ -162,7 +162,7 @@ app.delete("/employees/:id", checkRole("HR Manager"), async (req, res) => {
     res.send({ message: "Employee deleted" });
   } catch (err) {
     console.error("MySQL Delete Error: ", err);
-    res.status(500).send(err);
+    res.status(500).send({ message: "Error deleting employee", error: err });
   }
 });
 
@@ -173,7 +173,7 @@ app.get("/projects", checkRole("Project Manager"), async (req, res) => {
     res.send(results);
   } catch (err) {
     console.error("MySQL Query Error: ", err);
-    res.status(500).send(err);
+    res.status(500).send({ message: "Error fetching projects", error: err });
   }
 });
 
@@ -185,7 +185,7 @@ app.get("/projects/:id", checkRole("Project Manager"), async (req, res) => {
     res.send(results[0]);
   } catch (err) {
     console.error("MySQL Query Error: ", err);
-    res.status(500).send(err);
+    res.status(500).send({ message: "Error fetching project", error: err });
   }
 });
 
@@ -215,7 +215,7 @@ app.post("/projects", checkRole("Project Manager"), async (req, res) => {
     res.send({ message: "Project added", id: result.insertId });
   } catch (err) {
     console.error("MySQL Insert Error in projects:", err);
-    res.status(500).send(err);
+    res.status(500).send({ message: "Error adding project", error: err });
   }
 });
 
@@ -246,7 +246,7 @@ app.put("/projects/:id", checkRole("Project Manager"), async (req, res) => {
     res.send({ message: "Project updated" });
   } catch (err) {
     console.error("MySQL Update Error in projects:", err);
-    res.status(500).send(err);
+    res.status(500).send({ message: "Error updating project", error: err });
   }
 });
 
@@ -257,7 +257,7 @@ app.delete("/projects/:id", checkRole("Project Manager"), async (req, res) => {
     res.send({ message: "Project deleted" });
   } catch (err) {
     console.error("MySQL Delete Error in projects:", err);
-    res.status(500).send(err);
+    res.status(500).send({ message: "Error deleting project", error: err });
   }
 });
 
@@ -268,7 +268,9 @@ app.get("/leave-requests", checkRole("Employee"), async (req, res) => {
     res.send(results);
   } catch (err) {
     console.error("MySQL Query Error: ", err);
-    res.status(500).send(err);
+    res
+      .status(500)
+      .send({ message: "Error fetching leave requests", error: err });
   }
 });
 
@@ -281,7 +283,9 @@ app.get("/leave-requests/:id", checkRole("Employee"), async (req, res) => {
     res.send(results[0]);
   } catch (err) {
     console.error("MySQL Query Error: ", err);
-    res.status(500).send(err);
+    res
+      .status(500)
+      .send({ message: "Error fetching leave request", error: err });
   }
 });
 
@@ -310,7 +314,7 @@ app.post("/leave-requests", checkRole("Employee"), async (req, res) => {
     res.send({ message: "Leave request added", id: result.insertId });
   } catch (err) {
     console.error("MySQL Insert Error in leave-requests:", err);
-    res.status(500).send(err);
+    res.status(500).send({ message: "Error adding leave request", error: err });
   }
 });
 
@@ -340,7 +344,9 @@ app.put("/leave-requests/:id", checkRole("Employee"), async (req, res) => {
     res.send({ message: "Leave request updated" });
   } catch (err) {
     console.error("MySQL Update Error in leave-requests:", err);
-    res.status(500).send(err);
+    res
+      .status(500)
+      .send({ message: "Error updating leave request", error: err });
   }
 });
 
@@ -351,7 +357,9 @@ app.delete("/leave-requests/:id", checkRole("Employee"), async (req, res) => {
     res.send({ message: "Leave request deleted" });
   } catch (err) {
     console.error("MySQL Delete Error in leave-requests:", err);
-    res.status(500).send(err);
+    res
+      .status(500)
+      .send({ message: "Error deleting leave request", error: err });
   }
 });
 
@@ -362,7 +370,9 @@ app.get("/approval-requests", checkRole("HR Manager"), async (req, res) => {
     res.send(results);
   } catch (err) {
     console.error("MySQL Query Error: ", err);
-    res.status(500).send(err);
+    res
+      .status(500)
+      .send({ message: "Error fetching approval requests", error: err });
   }
 });
 
@@ -375,7 +385,9 @@ app.get("/approval-requests/:id", checkRole("HR Manager"), async (req, res) => {
     res.send(results[0]);
   } catch (err) {
     console.error("MySQL Query Error: ", err);
-    res.status(500).send(err);
+    res
+      .status(500)
+      .send({ message: "Error fetching approval request", error: err });
   }
 });
 
@@ -397,7 +409,9 @@ app.post("/approval-requests", checkRole("HR Manager"), async (req, res) => {
     res.send({ message: "Approval request added", id: result.insertId });
   } catch (err) {
     console.error("MySQL Insert Error in approval-requests:", err);
-    res.status(500).send(err);
+    res
+      .status(500)
+      .send({ message: "Error adding approval request", error: err });
   }
 });
 
@@ -425,7 +439,9 @@ app.put("/approval-requests/:id", checkRole("HR Manager"), async (req, res) => {
     res.send({ message: "Approval request updated" });
   } catch (err) {
     console.error("MySQL Update Error in approval-requests:", err);
-    res.status(500).send(err);
+    res
+      .status(500)
+      .send({ message: "Error updating approval request", error: err });
   }
 });
 
@@ -439,7 +455,9 @@ app.delete(
       res.send({ message: "Approval request deleted" });
     } catch (err) {
       console.error("MySQL Delete Error in approval-requests:", err);
-      res.status(500).send(err);
+      res
+        .status(500)
+        .send({ message: "Error deleting approval request", error: err });
     }
   }
 );
@@ -447,7 +465,7 @@ app.delete(
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send({ message: "Something went wrong!" });
+  res.status(500).send({ message: "Something went wrong!", error: err });
 });
 
 app.listen(port, () => {
