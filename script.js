@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadEmployees() {
+  console.log("Fetching URL: http://localhost:3001/employees");
   fetch("http://localhost:3001/employees", {
     headers: {
       role: "HR Manager",
@@ -103,6 +104,9 @@ function loadEmployees() {
          <tbody>`;
       if (Array.isArray(data)) {
         data.forEach((employee) => {
+          const photo = employee.Photo
+            ? employee.Photo
+            : "public/uploads/photo_user.png";
           table += `<tr>
                       <td>${employee.ID}</td>
                       <td>${employee.FullName}</td>
@@ -111,7 +115,7 @@ function loadEmployees() {
                       <td>${employee.Status}</td>
                       <td>${employee.PeoplePartner}</td>
                       <td>${employee.OutOfOfficeBalance}</td>
-                      <td><img src="${employee.Photo}" alt="Employee Photo" class="img-thumbnail" style="max-width: 50px;"></td>
+                      <td><img src="${photo}" alt="Employee Photo" class="img-thumbnail" style="max-width: 50px;"></td>
                       <td>
                         <button class="btn btn-sm btn-warning" onclick="editEmployee(${employee.ID})">Edit</button>
                         <button class="btn btn-sm btn-danger" onclick="deleteEmployee(${employee.ID})">Delete</button>
@@ -206,6 +210,7 @@ function deleteEmployee(id) {
 }
 
 function loadProjects() {
+  console.log("Fetching URL: http://localhost:3001/projects");
   fetch("http://localhost:3001/projects", {
     headers: {
       role: "Project Manager",
@@ -333,6 +338,7 @@ function deleteProject(id) {
 }
 
 function loadLeaveRequests() {
+  console.log("Fetching URL: http://localhost:3001/leave-requests");
   fetch("http://localhost:3001/leave-requests", {
     headers: {
       role: "Employee",
@@ -468,6 +474,7 @@ function deleteLeaveRequest(id) {
 }
 
 function loadApprovalRequests() {
+  console.log("Fetching URL: http://localhost:3001/approval-requests");
   fetch("http://localhost:3001/approval-requests", {
     headers: {
       role: "HR Manager",

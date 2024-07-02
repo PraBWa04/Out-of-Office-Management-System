@@ -101,7 +101,9 @@ app.post(
   async (req, res) => {
     try {
       const newEmployee = req.body;
-      const photo = req.file ? `/uploads/${req.file.filename}` : null;
+      const photo = req.file
+        ? `/uploads/${req.file.filename}`
+        : "/uploads/photo_user.png";
       const sql =
         "INSERT INTO Employees (FullName, Subdivision, Position, Status, PeoplePartner, OutOfOfficeBalance, Photo) VALUES (?, ?, ?, ?, ?, ?, ?)";
       const values = [
