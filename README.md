@@ -15,58 +15,114 @@ This project is a leave management system for company employees. It allows HR ma
 - Express.js
 - MySQL
 - Postman for testing API
+- HTML
+- CSS (Bootstrap)
+- JavaScript
 
-## SQL Queries to Create Database
+## Installation and Setup
 
-```sql
-CREATE DATABASE IF NOT EXISTS OutOfOfficeDB;
+### Prerequisites
 
-USE OutOfOfficeDB;
+- Node.js
+- MySQL
 
-CREATE TABLE IF NOT EXISTS Employees (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    FullName VARCHAR(255) NOT NULL,
-    Subdivision VARCHAR(255) NOT NULL,
-    Position VARCHAR(255) NOT NULL,
-    Status ENUM('Active', 'Inactive') NOT NULL,
-    PeoplePartner INT,
-    OutOfOfficeBalance INT NOT NULL,
-    Photo VARCHAR(255),
-    FOREIGN KEY (PeoplePartner) REFERENCES Employees(ID)
-);
+### Installation
 
-CREATE TABLE IF NOT EXISTS LeaveRequests (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    EmployeeID INT NOT NULL,
-    AbsenceReason VARCHAR(255) NOT NULL,
-    StartDate DATE NOT NULL,
-    EndDate DATE NOT NULL,
-    Comment TEXT,
-    Status ENUM('New', 'Submitted', 'Approved', 'Rejected', 'Cancelled') NOT NULL DEFAULT 'New',
-    FOREIGN KEY (EmployeeID) REFERENCES Employees(ID)
-);
+1. **Clone the repository:**
 
-CREATE TABLE IF NOT EXISTS ApprovalRequests (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    ApproverID INT NOT NULL,
-    LeaveRequestID INT NOT NULL,
-    Status ENUM('New', 'Approved', 'Rejected') NOT NULL DEFAULT 'New',
-    Comment TEXT,
-    FOREIGN KEY (ApproverID) REFERENCES Employees(ID),
-    FOREIGN KEY (LeaveRequestID) REFERENCES LeaveRequests(ID)
-);
+   **console**
+   git clone https://github.com/PraBWa04/Out-of-Office-Management-System.git
+   cd Out-of-Office-Management-System
 
-CREATE TABLE IF NOT EXISTS Projects (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    ProjectType VARCHAR(255) NOT NULL,
-    StartDate DATE NOT NULL,
-    EndDate DATE,
-    ProjectManager INT NOT NULL,
-    Comment TEXT,
-    Status ENUM('Active', 'Inactive') NOT NULL,
-    FOREIGN KEY (ProjectManager) REFERENCES Employees(ID)
-);
+2. **Install dependencies:**
+   **console**
+   npm install
 
-INSERT INTO Employees (FullName, Subdivision, Position, Status, PeoplePartner, OutOfOfficeBalance, Photo)
-VALUES ('John Doe', 'IT', 'Developer', 'Active', NULL, 10, 'http://example.com/photo.jpg');
-```
+3. **Set up the MySQL database:**
+
+- Create a MySQL database named OutOfOfficeDB.
+- Import the database.sql file into your MySQL database.
+
+4. **Configure the database connection**:
+
+Ensure your server.js file has the correct database connection settings:
+
+**javascript**
+const db = await mysql.createConnection({
+host: "localhost",
+user: "root",
+password: "YOUR_PASSWORD",
+database: "OutOfOfficeDB",
+});
+
+Running the Application
+Start the server:
+**console**
+npm start
+Open your browser and navigate to:
+
+**console**
+http://localhost:3001
+
+**API Endpoints**
+**Employees**
+GET /employees
+Get all employees
+GET /employees/
+Get employee by ID
+POST /employees
+Add new employee
+PUT /employees/
+Update employee by ID
+DELETE /employees/
+Delete employee by ID
+**Projects**
+GET /projects
+Get all projects
+GET /projects/
+Get project by ID
+POST /projects
+Add new project
+PUT /projects/
+Update project by ID
+DELETE /projects/
+Delete project by ID
+**Leave Requests**
+GET /leave-requests
+Get all leave requests
+GET /leave-requests/
+Get leave request by ID
+POST /leave-requests
+Add new leave request
+PUT /leave-requests/
+Update leave request by ID
+DELETE /leave-requests/
+Delete leave request by ID
+**Approval Requests**
+GET /approval-requests
+Get all approval requests
+GET /approval-requests/
+Get approval request by ID
+POST /approval-requests
+Add new approval request
+PUT /approval-requests/
+Update approval request by ID
+DELETE /approval-requests/
+Delete approval request by ID
+
+**Role-based Access Control**
+_HR Manager:_
+
+- Full access to employees and approval requests.
+- Read-only access to leave requests and projects related to their employees.
+  _Project Manager:_
+  - Full access to projects and approval requests.
+  - Read-only access to leave requests and employees related to their projects.
+    _Employee:_
+  - Full access to their own leave requests.
+  - Read-only access to approval requests related to their own leave requests and their projects.
+    **Screenshots**
+    ![GET Employees](image.png)
+    ![POST Employees](image-1.png)
+    ![PUT Employees](image-2.png)
+    ![DELETE Employees](image-3.png)

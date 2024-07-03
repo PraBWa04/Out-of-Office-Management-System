@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "Цей проект є системою управління відпустками для працівників компанії. Він дозволяє HR менеджерам, проектним менеджерам та працівникам керувати відпустками, проектами та запитами на затвердження.",
+  "description": "This project is a vacation management system for company employees. It allows HR managers, project managers and employees to manage leave, projects and approval requests.",
   "dependencies": {
     "body-parser": "^1.20.2",
     "bootstrap": "^5.3.3",
