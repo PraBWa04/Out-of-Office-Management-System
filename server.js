@@ -4,7 +4,6 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const bodyParser = require("body-parser");
 
 const app = express();
 const port = 3001;
@@ -23,7 +22,7 @@ app.use(
   })
 );
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.static("public"));
 
 const storage = multer.diskStorage({

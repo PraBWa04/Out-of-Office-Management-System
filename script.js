@@ -87,8 +87,14 @@ function loadEmployees() {
       return response.json();
     })
     .then((data) => {
-      const employeesTable = document.getElementById("employees-table");
-      let table = `<thead class="thead-dark">
+      renderEmployeesTable(data);
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+function renderEmployeesTable(data) {
+  const employeesTable = document.getElementById("employees-table");
+  let table = `<thead class="thead-dark">
             <tr>
               <th>ID</th>
               <th>Full Name</th>
@@ -102,12 +108,12 @@ function loadEmployees() {
             </tr>
          </thead>
          <tbody>`;
-      if (Array.isArray(data)) {
-        data.forEach((employee) => {
-          const photo = employee.Photo
-            ? employee.Photo
-            : "public/uploads/photo_user.png";
-          table += `<tr>
+  if (Array.isArray(data)) {
+    data.forEach((employee) => {
+      const photo = employee.Photo
+        ? employee.Photo
+        : "public/uploads/photo_user.png";
+      table += `<tr>
                       <td>${employee.ID}</td>
                       <td>${employee.FullName}</td>
                       <td>${employee.Subdivision}</td>
@@ -121,12 +127,10 @@ function loadEmployees() {
                         <button class="btn btn-sm btn-danger" onclick="deleteEmployee(${employee.ID})">Delete</button>
                       </td>
                     </tr>`;
-        });
-      }
-      table += `</tbody>`;
-      employeesTable.innerHTML = table;
-    })
-    .catch((error) => console.error("Error:", error));
+    });
+  }
+  table += `</tbody>`;
+  employeesTable.innerHTML = table;
 }
 
 function addEmployee() {
@@ -160,15 +164,23 @@ function editEmployee(id) {
       return response.json();
     })
     .then((employee) => {
-      document.getElementById("edit-employee-id").value = employee.ID;
-      document.getElementById("edit-full-name").value = employee.FullName;
-      document.getElementById("edit-subdivision").value = employee.Subdivision;
-      document.getElementById("edit-position").value = employee.Position;
-      document.getElementById("edit-status").value = employee.Status;
-      document.getElementById("edit-people-partner").value =
-        employee.PeoplePartner;
+      const {
+        ID,
+        FullName,
+        Subdivision,
+        Position,
+        Status,
+        PeoplePartner,
+        OutOfOfficeBalance,
+      } = employee;
+      document.getElementById("edit-employee-id").value = ID;
+      document.getElementById("edit-full-name").value = FullName;
+      document.getElementById("edit-subdivision").value = Subdivision;
+      document.getElementById("edit-position").value = Position;
+      document.getElementById("edit-status").value = Status;
+      document.getElementById("edit-people-partner").value = PeoplePartner;
       document.getElementById("edit-out-of-office-balance").value =
-        employee.OutOfOfficeBalance;
+        OutOfOfficeBalance;
       document.getElementById("edit-employee").style.display = "block";
     })
     .catch((error) => console.error("Error:", error));
@@ -221,8 +233,14 @@ function loadProjects() {
       return response.json();
     })
     .then((data) => {
-      const projectsTable = document.getElementById("projects-table");
-      let table = `<thead class="thead-dark">
+      renderProjectsTable(data);
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+function renderProjectsTable(data) {
+  const projectsTable = document.getElementById("projects-table");
+  let table = `<thead class="thead-dark">
             <tr>
               <th>ID</th>
               <th>Project Type</th>
@@ -235,9 +253,9 @@ function loadProjects() {
             </tr>
          </thead>
          <tbody>`;
-      if (Array.isArray(data)) {
-        data.forEach((project) => {
-          table += `<tr>
+  if (Array.isArray(data)) {
+    data.forEach((project) => {
+      table += `<tr>
                       <td>${project.ID}</td>
                       <td>${project.ProjectType}</td>
                       <td>${project.StartDate}</td>
@@ -250,12 +268,10 @@ function loadProjects() {
                         <button class="btn btn-sm btn-danger" onclick="deleteProject(${project.ID})">Delete</button>
                       </td>
                     </tr>`;
-        });
-      }
-      table += `</tbody>`;
-      projectsTable.innerHTML = table;
-    })
-    .catch((error) => console.error("Error:", error));
+    });
+  }
+  table += `</tbody>`;
+  projectsTable.innerHTML = table;
 }
 
 function addProject() {
@@ -289,14 +305,22 @@ function editProject(id) {
       return response.json();
     })
     .then((project) => {
-      document.getElementById("edit-project-id").value = project.ID;
-      document.getElementById("edit-project-type").value = project.ProjectType;
-      document.getElementById("edit-start-date").value = project.StartDate;
-      document.getElementById("edit-end-date").value = project.EndDate;
-      document.getElementById("edit-project-manager").value =
-        project.ProjectManager;
-      document.getElementById("edit-comment").value = project.Comment;
-      document.getElementById("edit-status").value = project.Status;
+      const {
+        ID,
+        ProjectType,
+        StartDate,
+        EndDate,
+        ProjectManager,
+        Comment,
+        Status,
+      } = project;
+      document.getElementById("edit-project-id").value = ID;
+      document.getElementById("edit-project-type").value = ProjectType;
+      document.getElementById("edit-start-date").value = StartDate;
+      document.getElementById("edit-end-date").value = EndDate;
+      document.getElementById("edit-project-manager").value = ProjectManager;
+      document.getElementById("edit-comment").value = Comment;
+      document.getElementById("edit-status").value = Status;
       document.getElementById("edit-project").style.display = "block";
     })
     .catch((error) => console.error("Error:", error));
@@ -349,10 +373,14 @@ function loadLeaveRequests() {
       return response.json();
     })
     .then((data) => {
-      const leaveRequestsTable = document.getElementById(
-        "leave-requests-table"
-      );
-      let table = `<thead class="thead-dark">
+      renderLeaveRequestsTable(data);
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+function renderLeaveRequestsTable(data) {
+  const leaveRequestsTable = document.getElementById("leave-requests-table");
+  let table = `<thead class="thead-dark">
             <tr>
               <th>ID</th>
               <th>Employee</th>
@@ -365,9 +393,9 @@ function loadLeaveRequests() {
             </tr>
          </thead>
          <tbody>`;
-      if (Array.isArray(data)) {
-        data.forEach((leaveRequest) => {
-          table += `<tr>
+  if (Array.isArray(data)) {
+    data.forEach((leaveRequest) => {
+      table += `<tr>
                       <td>${leaveRequest.ID}</td>
                       <td>${leaveRequest.EmployeeID}</td>
                       <td>${leaveRequest.AbsenceReason}</td>
@@ -380,12 +408,10 @@ function loadLeaveRequests() {
                         <button class="btn btn-sm btn-danger" onclick="deleteLeaveRequest(${leaveRequest.ID})">Delete</button>
                       </td>
                     </tr>`;
-        });
-      }
-      table += `</tbody>`;
-      leaveRequestsTable.innerHTML = table;
-    })
-    .catch((error) => console.error("Error:", error));
+    });
+  }
+  table += `</tbody>`;
+  leaveRequestsTable.innerHTML = table;
 }
 
 function addLeaveRequest() {
@@ -421,16 +447,14 @@ function editLeaveRequest(id) {
       return response.json();
     })
     .then((leaveRequest) => {
-      document.getElementById("edit-leave-request-id").value = leaveRequest.ID;
-      document.getElementById("edit-leave-employee").value =
-        leaveRequest.EmployeeID;
-      document.getElementById("edit-absence-reason").value =
-        leaveRequest.AbsenceReason;
-      document.getElementById("edit-leave-start-date").value =
-        leaveRequest.StartDate;
-      document.getElementById("edit-leave-end-date").value =
-        leaveRequest.EndDate;
-      document.getElementById("edit-comment").value = leaveRequest.Comment;
+      const { ID, EmployeeID, AbsenceReason, StartDate, EndDate, Comment } =
+        leaveRequest;
+      document.getElementById("edit-leave-request-id").value = ID;
+      document.getElementById("edit-leave-employee").value = EmployeeID;
+      document.getElementById("edit-absence-reason").value = AbsenceReason;
+      document.getElementById("edit-leave-start-date").value = StartDate;
+      document.getElementById("edit-leave-end-date").value = EndDate;
+      document.getElementById("edit-comment").value = Comment;
       document.getElementById("edit-leave-request").style.display = "block";
     })
     .catch((error) => console.error("Error:", error));
@@ -485,10 +509,16 @@ function loadApprovalRequests() {
       return response.json();
     })
     .then((data) => {
-      const approvalRequestsTable = document.getElementById(
-        "approval-requests-table"
-      );
-      let table = `<thead class="thead-dark">
+      renderApprovalRequestsTable(data);
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+function renderApprovalRequestsTable(data) {
+  const approvalRequestsTable = document.getElementById(
+    "approval-requests-table"
+  );
+  let table = `<thead class="thead-dark">
             <tr>
               <th>ID</th>
               <th>Approver</th>
@@ -499,9 +529,9 @@ function loadApprovalRequests() {
             </tr>
          </thead>
          <tbody>`;
-      if (Array.isArray(data)) {
-        data.forEach((approvalRequest) => {
-          table += `<tr>
+  if (Array.isArray(data)) {
+    data.forEach((approvalRequest) => {
+      table += `<tr>
                       <td>${approvalRequest.ID}</td>
                       <td>${approvalRequest.ApproverID}</td>
                       <td>${approvalRequest.LeaveRequestID}</td>
@@ -512,12 +542,10 @@ function loadApprovalRequests() {
                         <button class="btn btn-sm btn-danger" onclick="deleteApprovalRequest(${approvalRequest.ID})">Delete</button>
                       </td>
                     </tr>`;
-        });
-      }
-      table += `</tbody>`;
-      approvalRequestsTable.innerHTML = table;
-    })
-    .catch((error) => console.error("Error:", error));
+    });
+  }
+  table += `</tbody>`;
+  approvalRequestsTable.innerHTML = table;
 }
 
 function addApprovalRequest() {
@@ -553,16 +581,14 @@ function editApprovalRequest(id) {
       return response.json();
     })
     .then((approvalRequest) => {
-      document.getElementById("edit-approval-request-id").value =
-        approvalRequest.ID;
-      document.getElementById("edit-approval-approver").value =
-        approvalRequest.ApproverID;
+      const { ID, ApproverID, LeaveRequestID, Comment, Status } =
+        approvalRequest;
+      document.getElementById("edit-approval-request-id").value = ID;
+      document.getElementById("edit-approval-approver").value = ApproverID;
       document.getElementById("edit-approval-leave-request").value =
-        approvalRequest.LeaveRequestID;
-      document.getElementById("edit-approval-comment").value =
-        approvalRequest.Comment;
-      document.getElementById("edit-approval-status").value =
-        approvalRequest.Status;
+        LeaveRequestID;
+      document.getElementById("edit-approval-comment").value = Comment;
+      document.getElementById("edit-approval-status").value = Status;
       document.getElementById("edit-approval-request").style.display = "block";
     })
     .catch((error) => console.error("Error:", error));

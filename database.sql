@@ -57,9 +57,9 @@ CREATE TABLE ApprovalRequests (
 
 -- Insert test data into the Employees table
 INSERT INTO Employees (FullName, Subdivision, Position, Status, PeoplePartner, OutOfOfficeBalance, Photo) VALUES 
-('John Doe', 'IT', 'Developer', 'Active', NULL, 10, NULL),
-('Jane Smith', 'HR', 'HR Manager', 'Active', NULL, 15, NULL),
-('Alice Brown', 'IT', 'Project Manager', 'Active', NULL, 5, NULL);  -- Additional manager for testing
+('John Cena', 'IT', 'Developer', 'Active', NULL, 10, NULL),
+('Al Pacino', 'HR', 'HR Manager', 'Active', NULL, 15, NULL),
+('Ivan Matyshchak', 'IT', 'Project Manager', 'Active', NULL, 5, NULL);  -- Additional manager for testing
 
 -- Insert test data into the LeaveRequests table
 INSERT INTO LeaveRequests (EmployeeID, AbsenceReason, StartDate, EndDate, Comment, Status) VALUES
