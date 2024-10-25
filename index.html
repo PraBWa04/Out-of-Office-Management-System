@@ -34,6 +34,30 @@
       <!-- Employee Section -->
       <section id="employees">
         <h2>Employees</h2>
+        <div class="form-group">
+          <label for="employee-search">Search Employees:</label>
+          <input
+            type="text"
+            id="employee-search"
+            class="form-control"
+            onkeyup="searchEmployees()"
+            placeholder="Search by name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="employee-sort">Sort by:</label>
+          <select
+            id="employee-sort"
+            class="form-control"
+            onchange="sortEmployees()"
+          >
+            <option value="name">Name</option>
+            <option value="position">Position</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+
         <table id="employees-table" class="table table-striped"></table>
         <h3>Add New Employee</h3>
         <form id="add-employee-form">
@@ -191,6 +215,30 @@
       <!-- Projects Section -->
       <section id="projects" class="mt-5">
         <h2>Projects</h2>
+        <div class="form-group">
+          <label for="project-search">Search Projects:</label>
+          <input
+            type="text"
+            id="project-search"
+            class="form-control"
+            onkeyup="searchProjects()"
+            placeholder="Search by type"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="project-sort">Sort by:</label>
+          <select
+            id="project-sort"
+            class="form-control"
+            onchange="sortProjects()"
+          >
+            <option value="type">Project Type</option>
+            <option value="manager">Project Manager</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+
         <table id="projects-table" class="table table-striped"></table>
         <h3>Add New Project</h3>
         <form id="add-project-form">
@@ -329,6 +377,29 @@
       <!-- Leave Requests Section -->
       <section id="leave-requests" class="mt-5">
         <h2>Leave Requests</h2>
+        <div class="form-group">
+          <label for="leave-request-search">Search Leave Requests:</label>
+          <input
+            type="text"
+            id="leave-request-search"
+            class="form-control"
+            onkeyup="searchLeaveRequests()"
+            placeholder="Search by reason"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="leave-request-sort">Sort by:</label>
+          <select
+            id="leave-request-sort"
+            class="form-control"
+            onchange="sortLeaveRequests()"
+          >
+            <option value="reason">Absence Reason</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+
         <table id="leave-requests-table" class="table table-striped"></table>
         <h3>Add New Leave Request</h3>
         <form id="add-leave-request-form">
@@ -447,6 +518,29 @@
       <!-- Approval Requests Section -->
       <section id="approval-requests" class="mt-5">
         <h2>Approval Requests</h2>
+        <div class="form-group">
+          <label for="approval-request-search">Search Approval Requests:</label>
+          <input
+            type="text"
+            id="approval-request-search"
+            class="form-control"
+            onkeyup="searchApprovalRequests()"
+            placeholder="Search by comment"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="approval-request-sort">Sort by:</label>
+          <select
+            id="approval-request-sort"
+            class="form-control"
+            onchange="sortApprovalRequests()"
+          >
+            <option value="status">Status</option>
+            <option value="approver">Approver</option>
+          </select>
+        </div>
+
         <table id="approval-requests-table" class="table table-striped"></table>
         <h3>Add New Approval Request</h3>
         <form id="add-approval-request-form">

@@ -42,7 +42,6 @@ const upload = multer({ storage: storage });
 function checkRole(role) {
   return (req, res, next) => {
     const userRole = req.headers["role"];
-    console.log(`Checking role: ${role}, received: ${userRole}`);
     if (userRole !== role) {
       return res.status(403).json({
         message: `Access denied: incorrect role (expected: ${role}, received: ${userRole})`,
@@ -190,14 +189,8 @@ app.get("/projects/:id", checkRole("Project Manager"), async (req, res) => {
 
 app.post("/projects", checkRole("Project Manager"), async (req, res) => {
   try {
-    console.log("Incoming request body for projects:", req.body); // Log request body
     const { projectType, startDate, endDate, projectManager, comment, status } =
       req.body;
-
-    if (!projectType || !startDate || !projectManager || !status) {
-      console.error("Missing required fields in projects", req.body);
-      return res.status(400).send({ message: "Missing required fields" });
-    }
 
     const sql =
       "INSERT INTO Projects (ProjectType, StartDate, EndDate, ProjectManager, Comment, Status) VALUES (?, ?, ?, ?, ?, ?)";
@@ -209,25 +202,18 @@ app.post("/projects", checkRole("Project Manager"), async (req, res) => {
       comment,
       status,
     ];
-    console.log("Executing SQL for projects:", sql, values); // Log SQL and values
     const [result] = await db.query(sql, values);
     res.send({ message: "Project added", id: result.insertId });
   } catch (err) {
-    console.error("MySQL Insert Error in projects:", err);
+    console.error("MySQL Insert Error: ", err);
     res.status(500).send({ message: "Error adding project", error: err });
   }
 });
 
 app.put("/projects/:id", checkRole("Project Manager"), async (req, res) => {
   try {
-    console.log("Incoming request body for projects:", req.body); // Log request body
     const { projectType, startDate, endDate, projectManager, comment, status } =
       req.body;
-
-    if (!projectType || !startDate || !projectManager || !status) {
-      console.error("Missing required fields in projects", req.body);
-      return res.status(400).send({ message: "Missing required fields" });
-    }
 
     const sql =
       "UPDATE Projects SET ProjectType = ?, StartDate = ?, EndDate = ?, ProjectManager = ?, Comment = ?, Status = ? WHERE ID = ?";
@@ -240,11 +226,10 @@ app.put("/projects/:id", checkRole("Project Manager"), async (req, res) => {
       status,
       req.params.id,
     ];
-    console.log(values); // Log the values array to check data before query execution
     await db.query(sql, values);
     res.send({ message: "Project updated" });
   } catch (err) {
-    console.error("MySQL Update Error in projects:", err);
+    console.error("MySQL Update Error: ", err);
     res.status(500).send({ message: "Error updating project", error: err });
   }
 });
@@ -255,7 +240,7 @@ app.delete("/projects/:id", checkRole("Project Manager"), async (req, res) => {
     await db.query(sql, [req.params.id]);
     res.send({ message: "Project deleted" });
   } catch (err) {
-    console.error("MySQL Delete Error in projects:", err);
+    console.error("MySQL Delete Error: ", err);
     res.status(500).send({ message: "Error deleting project", error: err });
   }
 });
@@ -290,14 +275,8 @@ app.get("/leave-requests/:id", checkRole("Employee"), async (req, res) => {
 
 app.post("/leave-requests", checkRole("Employee"), async (req, res) => {
   try {
-    console.log("Incoming request body for leave-requests:", req.body); // Log request body
     const { EmployeeID, AbsenceReason, StartDate, EndDate, Comment, Status } =
       req.body;
-
-    if (!EmployeeID || !AbsenceReason || !StartDate || !EndDate || !Status) {
-      console.error("Missing required fields in leave-requests", req.body);
-      return res.status(400).send({ message: "Missing required fields" });
-    }
 
     const sql =
       "INSERT INTO LeaveRequests (EmployeeID, AbsenceReason, StartDate, EndDate, Comment, Status) VALUES (?, ?, ?, ?, ?, ?)";
@@ -312,21 +291,15 @@ app.post("/leave-requests", checkRole("Employee"), async (req, res) => {
     const [result] = await db.query(sql, values);
     res.send({ message: "Leave request added", id: result.insertId });
   } catch (err) {
-    console.error("MySQL Insert Error in leave-requests:", err);
+    console.error("MySQL Insert Error: ", err);
     res.status(500).send({ message: "Error adding leave request", error: err });
   }
 });
 
 app.put("/leave-requests/:id", checkRole("Employee"), async (req, res) => {
   try {
-    console.log("Incoming request body for leave-requests:", req.body); // Log request body
     const { EmployeeID, AbsenceReason, StartDate, EndDate, Comment, Status } =
       req.body;
-
-    if (!EmployeeID || !AbsenceReason || !StartDate || !EndDate || !Status) {
-      console.error("Missing required fields in leave-requests", req.body);
-      return res.status(400).send({ message: "Missing required fields" });
-    }
 
     const sql =
       "UPDATE LeaveRequests SET EmployeeID = ?, AbsenceReason = ?, StartDate = ?, EndDate = ?, Comment = ?, Status = ? WHERE ID = ?";
@@ -342,7 +315,7 @@ app.put("/leave-requests/:id", checkRole("Employee"), async (req, res) => {
     await db.query(sql, values);
     res.send({ message: "Leave request updated" });
   } catch (err) {
-    console.error("MySQL Update Error in leave-requests:", err);
+    console.error("MySQL Update Error: ", err);
     res
       .status(500)
       .send({ message: "Error updating leave request", error: err });
@@ -355,7 +328,7 @@ app.delete("/leave-requests/:id", checkRole("Employee"), async (req, res) => {
     await db.query(sql, [req.params.id]);
     res.send({ message: "Leave request deleted" });
   } catch (err) {
-    console.error("MySQL Delete Error in leave-requests:", err);
+    console.error("MySQL Delete Error: ", err);
     res
       .status(500)
       .send({ message: "Error deleting leave request", error: err });
@@ -392,22 +365,15 @@ app.get("/approval-requests/:id", checkRole("HR Manager"), async (req, res) => {
 
 app.post("/approval-requests", checkRole("HR Manager"), async (req, res) => {
   try {
-    console.log("Incoming request body for approval-requests:", req.body); // Log request body
     const { approverID, leaveRequestID, approvalStatus, comment } = req.body;
-
-    if (!approverID || !leaveRequestID || !approvalStatus) {
-      console.error("Missing required fields in approval-requests", req.body);
-      return res.status(400).send({ message: "Missing required fields" });
-    }
 
     const sql =
       "INSERT INTO ApprovalRequests (ApproverID, LeaveRequestID, ApprovalStatus, Comment) VALUES (?, ?, ?, ?)";
     const values = [approverID, leaveRequestID, approvalStatus, comment];
-    console.log("Executing SQL for approval-requests:", sql, values); // Log SQL and values
     const [result] = await db.query(sql, values);
     res.send({ message: "Approval request added", id: result.insertId });
   } catch (err) {
-    console.error("MySQL Insert Error in approval-requests:", err);
+    console.error("MySQL Insert Error: ", err);
     res
       .status(500)
       .send({ message: "Error adding approval request", error: err });
@@ -416,13 +382,7 @@ app.post("/approval-requests", checkRole("HR Manager"), async (req, res) => {
 
 app.put("/approval-requests/:id", checkRole("HR Manager"), async (req, res) => {
   try {
-    console.log("Incoming request body for approval-requests:", req.body); // Log request body
     const { approverID, leaveRequestID, approvalStatus, comment } = req.body;
-
-    if (!approverID || !leaveRequestID || !approvalStatus) {
-      console.error("Missing required fields in approval-requests", req.body);
-      return res.status(400).send({ message: "Missing required fields" });
-    }
 
     const sql =
       "UPDATE ApprovalRequests SET ApproverID = ?, LeaveRequestID = ?, ApprovalStatus = ?, Comment = ? WHERE ID = ?";
@@ -433,11 +393,10 @@ app.put("/approval-requests/:id", checkRole("HR Manager"), async (req, res) => {
       comment,
       req.params.id,
     ];
-    console.log(values); // Log the values array to check data before query execution
     await db.query(sql, values);
     res.send({ message: "Approval request updated" });
   } catch (err) {
-    console.error("MySQL Update Error in approval-requests:", err);
+    console.error("MySQL Update Error: ", err);
     res
       .status(500)
       .send({ message: "Error updating approval request", error: err });
@@ -453,7 +412,7 @@ app.delete(
       await db.query(sql, [req.params.id]);
       res.send({ message: "Approval request deleted" });
     } catch (err) {
-      console.error("MySQL Delete Error in approval-requests:", err);
+      console.error("MySQL Delete Error: ", err);
       res
         .status(500)
         .send({ message: "Error deleting approval request", error: err });
